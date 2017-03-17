@@ -38,6 +38,9 @@ bash ./start_server.sh
 
 To stop it, use `/stop_server.sh`.
 
+## Using the Server
+
+API information forthcoming. 
 
 ### EC2 Usage
 To install on a brand new Amazon EC2 Ubuntu 16.04 LTS instance, do the following:
