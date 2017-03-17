@@ -38,11 +38,13 @@ bash ./start_server.sh
 
 To stop it, use `/stop_server.sh`.
 
+The output from the latest session will be stored in `/server_log.txt`.
+
 ## Using the Server
 
 API information forthcoming. 
 
-### EC2 Usage
+## EC2 Setup
 To install on a brand new Amazon EC2 Ubuntu 16.04 LTS instance, do the following:
 ```
 # Install dependencies
@@ -61,10 +63,6 @@ cp template.properties dev.properties
 # Start the server in the background (optional)
 bash ./start_server.sh
 ```
-
-## Debugging
-
-The output from the latest session will be stored in `/server_log.txt`.
 
 ## Authors
 
