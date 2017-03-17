@@ -1,8 +1,13 @@
-# Run this file in the terminal to start the server.
+#!/bin/bash
 
-# Please make efforts to use this file to start the server,
-# even during development, so that other people can start
-# the server if the computer restarts or something.
+# Starts the server in the background using the address located 
+# in the dev.properties file.
 
-rails server -b ec2-52-88-72-190.us-west-2.compute.amazonaws.com
+ENV=${1:-dev}
 
+function prop {
+    grep "${1}" ${ENV}.properties|cut -d'=' -f2
+}
+
+rails server -d -b "$(prop 'app.server.address')" 2>&1 | tee server_log.txt
+echo 'The server is now running.'
