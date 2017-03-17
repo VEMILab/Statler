@@ -42,7 +42,7 @@ The output from the latest session will be stored in `/server_log.txt`.
 
 ## Using the Server
 
-API information forthcoming. 
+API information is forthcoming.
 
 ## EC2 Setup
 To install on a brand new Amazon EC2 Ubuntu 16.04 LTS instance, do the following:
