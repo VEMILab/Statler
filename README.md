@@ -2,7 +2,7 @@
 
 ![Media Ecology Project Image](/media/mep-banner.png)
 
-Statler is a server app for storing and retrieving rich annotations for video, and was created for the [Media Ecology Project](https://sites.dartmouth.edu/mediaecology/). It is a companion to [Waldorf](https://github.com/seieibob/Waldorf), which serves as the frontend.
+Statler is a server app for storing and retrieving rich annotations for video, created for the [Media Ecology Project](https://sites.dartmouth.edu/mediaecology/). It is a companion to [Waldorf](https://github.com/seieibob/Waldorf), which serves as the frontend.
 
 ## Setup
 
