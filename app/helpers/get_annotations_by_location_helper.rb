@@ -1,0 +1,2 @@
+module GetAnnotationsByLocationHelper
+end

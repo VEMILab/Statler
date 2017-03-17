@@ -1,0 +1,25 @@
+<body style="margin-left: 40px; background-color: black">
+<h1 style="color:white; font-family:courier; ">yo! it's a rails server!</h1>
+<p><p>
+<h3 style="color:white; font-family:courier; ">
+<p>
+<div class="form">
+<border-style:solid>
+<border-size:2px> 
+<border-color:red>
+<align:left>
+<font-color: #B98000>
+<display: block>
+<%= form_for :user, url: '/users' do |f| %>
+  <h3>Sign Up!</h3>
+  Name: <%= f.text_field :name %><br>
+  Email: <%= f.text_field :email %><br>
+  Password: <%= f.password_field :password %><br>
+  Password Confirmation: <%= f.password_field :password_confirmation %><br>
+  <%= f.submit "Submit" %>
+
+<% end %>
+</div>
+<p><p>
+
+<b>Would you like to <a href="http://localhost:3000">return to the main page?</a></b>

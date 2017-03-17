@@ -1,0 +1,20 @@
+<body style="margin-left: 40px; background-color: black">
+<h1 style="color:white; font-family:courier; ">yo! it's a rails server!</h1>
+<p><p>
+<h2 style="color:white; font-family:courier; ">
+<%= search_helper %>
+<% @annotations.each do |t| %>
+  <br> Annotation Number: <%= t.id %>
+  <br> Annotation: <%= t.annotation %>
+  <p>
+<% end %>
+<% @videos.each do |t| %>
+  <br> Video Title: <%= t.title %>
+  <p>
+<% end %>
+<% @locations.each do |t| %>
+  <br> Location: <%= t.location_url %>
+  <p>
+<% end %>
+<p><p>
+</body>

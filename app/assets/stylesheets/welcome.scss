@@ -1,0 +1,25 @@
+// Place all the styles related to the welcome controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+div {
+    border-style: solid;
+    border-width: 3px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-color: white;
+  
+    width: 420px;
+    background-color: #000000;	
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+	
+}
+
+div.form {
+    font-family: Helvetica;
+    color: white;
+}
+

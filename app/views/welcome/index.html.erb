@@ -1,0 +1,104 @@
+<body style="margin-left: 40px; background-color: black">
+<h1 style="color:green; font-family:courier; ">yo! it's a rails server!</h1>
+<p><p>
+<h2 style="color:green; font-family:courier; ">
+<!--<%= welcome_helper %></h2>-->
+
+<!--
+<div class="form">
+<border-style:solid>
+<border-size:2px> 
+<border-color:red>
+<align:left>
+<font-color: #B98000>
+
+<%= form_tag("/login", :method => "get", id: "login-form") do %>
+  <%= text_field_tag :username, params[:username], placeholder: "Username" %>
+
+  <%= submit_tag "Log In" %>
+<% end %>
+</div>
+<br>
+<p>
+<div class="form">
+<border-style:solid>
+<border-size:2px> 
+<border-color:red>
+<align:left>
+<font-color: #B98000>
+<b>New User?</b>
+<%= form_tag("/user", :method => "get", id: "user") do %>
+  <%= text_field_tag :username, params[:username], placeholder: "Username" %>
+  <%= text_field_tag :email, params[:email], placeholder: "Email" %>
+  <%= password_field_tag :password, params[:pass], placeholder: "Password" %>
+  <%= submit_tag "Create" %>
+<% end %>
+</div>
+-->
+<p>
+<p>
+<p>
+
+<h3 style="color:yellow; font-family:courier;">>Create new annotation:</h3>
+<%= form_tag("/annotation", method: "post") do %><br>
+      Annotation: <%= text_field_tag(:annotation)%><br>
+      Video Title: <%= text_field_tag(:video_title)%><br>
+      Video Author: <%= text_field_tag(:video_author) %><br>	
+      Video Location: <%= text_field_tag(:location)%><br>
+      Semantic Tag: <%= text_field_tag(:semantic_tag)%>
+      	
+      <%= submit_tag("Do It!") %>
+<% end %>
+<p><p>
+<h3 style="color:yellow; font-family:courier;">>Search by annotation:</h3>
+<p>
+<div class="form">
+<border-style:solid>
+<border-size:2px> 
+<border-color:red>
+<align:left>
+<font-color: #B98000>
+
+<%= form_tag("/search", :method => "get", id: "search-form") do %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search Annotations:" %>
+  <%= submit_tag "Search" %>
+<% end %>
+</div>
+
+<h3 style="color:yellow; font-family:courier;">>Search by tag:</h3>
+<p>
+<div class="form">
+<border-style:solid>
+<border-size:2px> 
+<border-color:red>
+<align:left>
+<font-color: #B98000>
+
+<%= form_tag("/searchtag", :method => "get", id: "search-form") do %>
+  <%= text_field_tag :searchtag, params[:searchtag], placeholder: "Search Semantic Tags:" %>
+  <%= submit_tag "Search" %>
+<% end %>
+
+</div>
+<p>
+<p>
+<h2 style="color:green; font-family:courier;">Here are the annotations that you have previously submitted:</h2>
+<h3 style="color:yellow; font-family:courier;">
+<%user_content_helper %>
+<% count = 0 %>
+<% if @returns == ["You need to be logged in to see annotations that you have submitted."] %>
+	<%== @returns[0] %>
+	
+<% elsif @returns == ["You have not submitted any annotations."] %>
+	<%== @returns[0] %>
+<% else %>
+	<% @returns.each do |t| %> 
+		<% vid = Video.select("title").where(:id => t.video_id)[0].title %>
+		<% x = "#{count+1}:<br>Annotation: #{t.annotation} <br>Video: #{vid}<br>" %>
+		<p><%== x %> </p>
+		<% count += 1 %>
+	<% end %>
+<% end %>
+</h3>
+</body>
+
