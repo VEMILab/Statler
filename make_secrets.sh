@@ -3,7 +3,7 @@
 # From https://irb.rocks/create-secrets-yml-file-dynamically-with-bash/
 
 if [ ! -f ./config/secrets.yml ]; then
-  echo -e "Generating a secrets.yml file"
+  echo -e "\nGenerating a secrets.yml file"
 
   # Random Keys
   KEY_DEV=$(bin/rake secret)
