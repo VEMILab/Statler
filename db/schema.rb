@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170317163906) do
+ActiveRecord::Schema.define(version: 20170322142416) do
 
 # Could not dump table "annotations" because of following NoMethodError
 #   undefined method `[]' for nil:NilClass
