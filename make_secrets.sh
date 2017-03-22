@@ -21,3 +21,5 @@ production:
   secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
 EOL
 fi
+
+echo "Secrets.yml generated."
