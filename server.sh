@@ -10,16 +10,12 @@ function prop {
     grep "${1}" dev.properties|cut -d'=' -f2
 }
 
-cmd="${1}"
-
-if [ "$cmd" = "start" ]; then
-    echo "Starting the server..."
-
+function setup_server {
     # Generate secrets file if it doesn't exist
     if [ ! -f ./config/secrets.yml ]; then
         echo "Secrets file not found. Generating..."
         bash ./make_secrets.sh
-        echo ""
+        echo
     fi
 
     # Abort if the dev.properties file does not exist
@@ -27,9 +23,15 @@ if [ "$cmd" = "start" ]; then
         echo -e "./dev.properties not found! Setting up from template."
         cp ./template.properties ./dev.properties
         echo -e "${YELLOW}Make sure to fill in the address you want this server to reside on, then run this command again.${NC}"
-        echo ""
+        echo
         exit
     fi
+}
+
+function start_server {
+    echo "Starting the server..."
+
+    setup_server
 
     # Abort if the dev.properties file is not configured
     if [ "$(prop 'app.server.address')" = "YOUR_ADDRESS_HERE" ]; then
@@ -44,14 +46,30 @@ if [ "$cmd" = "start" ]; then
     set +e
 
     echo 'The server is now running.'
+}
 
-elif [ "$cmd" = "stop" ]; then
+function stop_server {
     pkill -f rails
     echo 'The server is now shut down.'
+}
 
-#elif [ "$cmd" = "help" ] || [ "$cmd" = "" ]; then
-else
+function show_help {
     echo "args:"
     echo -e "  start: Starts the server"
     echo -e "  stop:  Stops the server"
+    echo -e "  setup: Sets up the server (creates required files, etc.)"
+}
+
+cmd="${1}"
+
+if [ "$cmd" = "setup" ]; then
+    setup_server
+elif [ "$cmd" = "start" ]; then
+    start_server
+elif [ "$cmd" = "stop" ]; then
+    stop_server
+
+#elif [ "$cmd" = "help" ] || [ "$cmd" = "" ]; then
+else
+    show_help
 fi

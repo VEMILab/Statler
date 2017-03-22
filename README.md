@@ -17,10 +17,10 @@ Unpack this repo somewhere, cd into it, and then run the following:
 
 ```
 bundle install
-bash ./start_server.sh
+bash ./server.sh setup
 ```
 
-Starting the server will fail the first time, and ask you to edit `/dev.properties`. The file looks like this:
+The setup command will ask you to edit `/dev.properties`. The file looks like this:
 
 ```
 app.server.address=YOUR_ADDRESS_HERE
@@ -34,10 +34,10 @@ After this, you should be ready to go.
 
 To start the server, run
 ```
-bash ./start_server.sh
+bash ./server.sh start
 ```
 
-To stop it, use `/stop_server.sh`.
+To stop it, use `bash ./server.sh stop`.
 
 The output from the latest session will be stored in `/server_log.txt`.
 
@@ -54,17 +54,18 @@ rvm --default use 2.3.1
 gem install bundler
 sudo apt-get install build-essential g++
 
-# Set up server
+# Set up server dependencies
 cd /Statler
 bundle install
 
 # Do first-time setup
-bash ./start_server.sh
+chmod +x ./server.sh
+./server.sh setup
 
 # Set up the dev.properties file!
 
 # Start the server in the background (optional)
-bash ./start_server.sh
+./server.sh start
 ```
 
 ## Authors
