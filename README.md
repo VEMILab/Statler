@@ -17,15 +17,16 @@ Unpack this repo somewhere, cd into it, and then run the following:
 
 ```
 bundle install
-sh ./make_secrets.sh
-cp template.properties dev.properties
+bash ./start_server.sh
 ```
 
-You will need to modify `/dev.properties`:
+Starting the server will fail the first time, and ask you to edit `/dev.properties`. The file looks like this:
+
 ```
 app.server.address=YOUR_ADDRESS_HERE
 ```
-Replace `YOUR_ADDRESS_HERE` with the public IP or DNS of the server.
+
+Replace `YOUR_ADDRESS_HERE` with the public IP or DNS of the server. Leave off the `http://` and port.
 
 After this, you should be ready to go.
 
@@ -56,9 +57,11 @@ sudo apt-get install build-essential g++
 # Set up server
 cd /Statler
 bundle install
-bash ./make_secrets.sh
-cp template.properties dev.properties
-# Make sure you set up the dev.properties file!
+
+# Do first-time setup
+bash ./start_server.sh
+
+# Set up the dev.properties file!
 
 # Start the server in the background (optional)
 bash ./start_server.sh
