@@ -14,6 +14,9 @@ function setup_server {
     # Generate secrets file if it doesn't exist
     if [ ! -f ./config/secrets.yml ]; then
         echo "Secrets file not found. Generating..."
+        # Stop spring to prevent a hang
+        spring stop
+        # Generate the secrets file
         bash ./make_secrets.sh
         echo
     fi
