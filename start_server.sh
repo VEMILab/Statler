@@ -3,6 +3,10 @@
 # Starts the server in the background using the address located 
 # in the dev.properties file.
 
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
 ENV=${1:-dev}
 
 function prop {
@@ -15,19 +19,22 @@ echo "Starting the server..."
 if [ ! -f ./config/secrets.yml ]; then
     echo "Secrets file not found. Generating..."
     bash ./make_secrets.sh
+    echo ""
 fi
 
 # Abort if the dev.properties file does not exist
 if [ ! -f ./dev.properties ]; then
-    echo "./dev.properties not found! Setting up from template."
+    echo -e "./dev.properties not found! Setting up from template."
     cp ./template.properties ./dev.properties
-    echo "Make sure to fill in the address you want this server to reside on, then run this command again."
+    echo -e "${YELLOW}Make sure to fill in the address you want this server to reside on, then run this command again.${NC}"
+    echo ""
     exit
 fi
 
 # Abort if the dev.properties file is not configured
-if [ "$(prop 'app.server.address')" = "YOUR_ADDRESS_HERE"]; then
-    echo "The address in ./dev.properties is not configured. Please fill this in and run this command again."
+if [ "$(prop 'app.server.address')" = "YOUR_ADDRESS_HERE" ]; then
+    echo -e "${RED}The address in ./dev.properties is not configured!${NC}"
+    echo "Please fill this in and run this command again."
     exit
 fi
 
