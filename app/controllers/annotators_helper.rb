@@ -62,17 +62,17 @@ def getAnnotationsByLocation
             break
           else
             #@annos.push(getAnnotationInfo(x)) <-- originally started pulling functionality into private function, added complexity seemed to outweigh readability
-          	video = Video.select("title", "location_ID").where(:ID => @pai.video_id)
-          	location = Location.select("location").where(:ID => @pai.location_id)
-          	user = User.select("name", "email").where(:ID => @pai.user_id)	
+          	video = Video.select("title", "location_ID").where(:ID => x.video_id)
+          	location = Location.select("location").where(:ID => x.location_id)
+          	user = User.select("name", "email").where(:ID => x.user_id)	
           	anno = {}
           	data = {}
-          	data[:text] = @pai.annotation
-          	data[:beginTime] = @pai.beginTime
-          	data[:endTime] = @pai.endTime
-          	data[:pointsArray] = @pai.pointsArray
+          	data[:text] = x.annotation
+          	data[:beginTime] = x.beginTime
+          	data[:endTime] = x.endTime
+          	data[:pointsArray] = x.pointsArray
           	meta = {}
-          	meta[:id] = @pai.id
+          	meta[:id] = x.id
           	meta[:title] = video[0].title
           	meta[:location] = location[0].location
           	unless user[0].nil?
