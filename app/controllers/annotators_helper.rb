@@ -61,10 +61,8 @@ end #end def getAnnotationsByLocation
 # Add check if annotation text and time and shape match any extant annotations?
 def addAnnotation
 	@new_id = newAnno(params)
-  respond_to do |format|
       #format.json { head :ok }
-      format.json { head :ok,  render :json => @new_id}#, status: :ok}
-    end
+  return format.json { head :ok,  render :json => @new_id}#, status: :ok}
 end #end def addAnnotation
 	
   
