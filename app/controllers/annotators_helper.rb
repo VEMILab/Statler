@@ -62,7 +62,7 @@ end #end def getAnnotationsByLocation
 def addAnnotation
 	@new_id = newAnno(params)
       #format.json { head :ok }
-  return format.json { head :ok,  render :json => @new_id}#, status: :ok}
+  renden :json => { head :ok, @new_id, status: :ok}
 end #end def addAnnotation
 	
   
