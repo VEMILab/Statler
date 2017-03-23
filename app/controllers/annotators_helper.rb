@@ -57,31 +57,33 @@ def getAnnotationsByLocation
 			for v in @videos
 				@annotations = Annotation.select("beginTime", "endTime", "annotation", "ID", "video_ID", "location_ID", "user_ID", "pointsArray").where(:video_ID => v.id)
 				for x in @annotations 
-					video = Video.select("title", "location_ID").where(:ID => x.video_id)
-					location = Location.select("location").where(:ID => x.location_id)
-					user = User.select("name", "email").where(:ID => x.user_id)	
-                    #if (user.nil?)
-                    #	user = {}
-                    #	user[:name] = "Waldorf"
-                    #	user[:email] = "waldorf@test.test"
-                    #end #end if user.nil?
-					anno = {}
-					data = {}
-					data[:text] = x.annotation
-					data[:beginTime] = x.beginTime
-					data[:endTime] = x.endTime
-					data[:pointsArray] = x.pointsArray
-					meta = {}
-					meta[:id] = x.id
-					meta[:title] = video[0].title
-					meta[:location] = location[0].location
-					unless user[0].nil?
-						meta[:userName] = user[0].name
-						meta[:userEmail] = user[0].email
-					end
-					anno[:data] = data
-					anno[:metadata] = meta
-					@annos.push(anno)
+          ## WRAP this next bit in an if/else: if not deprecated, do this, else call function on next newest
+          if x.Depreciated
+            break
+          else
+            #@annos.push(getAnnotationInfo(x)) <-- originally started pulling functionality into private function, added complexity seemed to outweigh readability
+          	video = Video.select("title", "location_ID").where(:ID => @pai.video_id)
+          	location = Location.select("location").where(:ID => @pai.location_id)
+          	user = User.select("name", "email").where(:ID => @pai.user_id)	
+          	anno = {}
+          	data = {}
+          	data[:text] = @pai.annotation
+          	data[:beginTime] = @pai.beginTime
+          	data[:endTime] = @pai.endTime
+          	data[:pointsArray] = @pai.pointsArray
+          	meta = {}
+          	meta[:id] = @pai.id
+          	meta[:title] = video[0].title
+          	meta[:location] = location[0].location
+          	unless user[0].nil?
+          		meta[:userName] = user[0].name
+          		meta[:userEmail] = user[0].email
+          	end
+          	anno[:data] = data
+          	anno[:metadata] = meta
+          end #end if x.Depreciated
+          @annos.push(anno) 
+          
 	  			end #end for x
 	  		end #end for v 
 			@annohash = {}
@@ -94,7 +96,6 @@ def getAnnotationsByLocation
 	  	end #end if @videos
 	end #end if @location
 end #end def getAnnotationsByLocation
-	
 
 
 ################# ADD ANNOTATION BY VIDEO LOCATION
