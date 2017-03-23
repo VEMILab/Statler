@@ -65,8 +65,7 @@ def addAnnotation
   #respond_to do |format|
     #format.json { head :ok, status :ok}
   #end
-  @ret = { head :ok, status :ok}
-  render :json => @ret
+  render json: { head :ok}, status: 200
 end #end def addAnnotation
 	
   
