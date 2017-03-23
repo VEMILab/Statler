@@ -1,49 +1,6 @@
 module AnnotatorsHelper
 	
 
-############ SEARCH ANNOTATIONS BY VIDEO TITLE
-
-def getAnnotationsByTitle
-	## search by title for now, by url/vid location for end product
-	search_term = params[:title]
-	@videos = Video.search(search_term).order("created_at DESC")
-	@annos = []
-	if @videos.present?
-		for v in @videos
-			@annotations = Annotation.select("beginTime", "endTime", "annotation", "ID", "video_ID", "location_ID", "user_ID", "pointsArray").where(:video_ID => v.id)
-			for x in @annotations 
-				video = Video.select("title", "location_ID").where(:ID => x.video_id)
-				location = Location.select("location").where(:ID => x.location_id)
-				user = User.select("name", "email").where(:ID => x.user_id)
-                anno = {}
-                data = {}
-				data[:text] = x.annotation
-				data[:beginTime] = x.beginTime
-				data[:endTime] = x.endTime
-				data[:pointsArray] = x.pointsArray
-                meta = {}
-				meta[:id] = x.id
-				meta[:title] = video[0].title
-				meta[:location] = location[0].location
-                unless user[0].nil?
-                    meta[:userName] = user[0].name
-                    meta[:userEmail] = user[0].email
-                end
-			anno[:data] = data
-			anno[:metadata] = meta
-			@annos.push(anno)
-  			end #end for x
-  		end #end for v 
-		@annohash = {}
-		@annohash[:annotations] = @annos
-  		render :json => @annohash
-  	else
-  		@annohash = {}
-		@annohash[:annotations] = @annos
-  		render :json => @annohash
-  	end #end if @videos
-end #end def getAnnotationsByTitle
-
 ##################### SEARCH ANNOTATION BY LOCATION
 
 def getAnnotationsByLocation
@@ -55,7 +12,7 @@ def getAnnotationsByLocation
 
 		if @videos.present?
 			for v in @videos
-				@annotations = Annotation.select("beginTime", "endTime", "annotation", "ID", "video_ID", "location_ID", "user_ID", "pointsArray", "deprecated").where(:video_ID => v.id)
+				@annotations = Annotation.select("beginTime", "endTime", "annotation", "ID", "video_ID", "location_ID", "user_ID", "pointsArray", "deprecated", "tags").where(:video_ID => v.id)
 				for x in @annotations 
           ## WRAP this next bit in an if/else: if not deprecated, do this, else call function on next newest
           if x.deprecated
@@ -71,6 +28,7 @@ def getAnnotationsByLocation
           	data[:beginTime] = x.beginTime
           	data[:endTime] = x.endTime
           	data[:pointsArray] = x.pointsArray
+            #data[:tags] = x.tags
           	meta = {}
           	meta[:id] = x.id
           	meta[:title] = video[0].title
@@ -117,6 +75,7 @@ def newAnno(params)
 	@annotation.pointsArray = params[:pointsArray]
     @annotation.beginTime = params[:beginTime]
 	@annotation.endTime = params[:endTime]
+  #@annotation.tags = params[:tags]
     @annotation.user_id = nil#session[:user_id]
     if params[:id]  ## if an old annotation id is supllied, this is an edit and we should create a pointer to the old annotation
     	@annotation.Prev_Anno_ID = params[:id]
