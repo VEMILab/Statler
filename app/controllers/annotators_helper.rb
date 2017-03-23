@@ -58,7 +58,7 @@ def getAnnotationsByLocation
 				@annotations = Annotation.select("beginTime", "endTime", "annotation", "ID", "video_ID", "location_ID", "user_ID", "pointsArray").where(:video_ID => v.id)
 				for x in @annotations 
           ## WRAP this next bit in an if/else: if not deprecated, do this, else call function on next newest
-          if x.deprecated
+          if x.deprecated == true
             break
           else
             #@annos.push(getAnnotationInfo(x)) <-- originally started pulling functionality into private function, added complexity seemed to outweigh readability
