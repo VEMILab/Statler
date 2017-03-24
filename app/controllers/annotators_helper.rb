@@ -60,57 +60,45 @@ end #end def getAnnotationsByLocation
 
 # Add check if annotation text and time and shape match any extant annotations?
 def addAnnotation
-	@new_id = newAnno(params)
-      #format.json { head :ok }
-  #respond_to do |format|
-    #format.json { head :ok, status :ok}
-  #end
-  render json: { head :ok}, status: 200
-end #end def addAnnotation
-	
-  
-############ NEW ANNOTATION
-private
-def newAnno(params)
 	@x = params[:annotation]
 	  
 	## Modified from annotations_controller.rb
 	@annotation = Annotation.new
-    @annotation.annotation = params[:annotation]
+  @annotation.annotation = params[:annotation]
 	@annotation.pointsArray = params[:pointsArray]
-    @annotation.beginTime = params[:beginTime]
+  @annotation.beginTime = params[:beginTime]
 	@annotation.endTime = params[:endTime]
   #@annotation.tags = params[:tags]
-    @annotation.user_id = nil#session[:user_id]
-    if params[:id]  ## if an old annotation id is supllied, this is an edit and we should create a pointer to the old annotation
-    	@annotation.Prev_Anno_ID = params[:id]
-    end
+  @annotation.user_id = nil#session[:user_id]
+  if params[:id]  ## if an old annotation id is supllied, this is an edit and we should create a pointer to the old annotation
+    @annotation.Prev_Anno_ID = params[:id]
+  end
 
       
-    @videos = [] 
-    @location = params[:location]
-    @semantic_tags = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
+  @videos = [] 
+  @location = params[:location]
+  @semantic_tags = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
  			
 	@location = Location.search(@location).order("created_at DESC") ## pulls location IDs
 	#if @location.present?
 	@videos = Video.select("id", "title", "author", "location_ID").where(:location_ID => @location)
-    #@videos = Video.search(params[:video_title]).order("created_at DESC")    
-    if @videos.empty?	
-	    @video = Video.new
-      	@video.title = params[:video_title]
+  #@videos = Video.search(params[:video_title]).order("created_at DESC")    
+  if @videos.empty?	
+	  @video = Video.new
+    @video.title = params[:video_title]
 		@video.author = params[:video_author]
 		@new_location = Location.new
-      	@new_location.location = params[:location]
+    @new_location.location = params[:location]
 		@new_location.save
 		@video.save
-      	@video.location_id = @new_location.id
+    @video.location_id = @new_location.id
 		@annotation.video_id = @video.id
-      	@annotation.location_id = @new_location.id
+    @annotation.location_id = @new_location.id
 		@video.save
 		@annotation.save
 
 		if @semantic_tags.empty?
-		    @new_tag = SemanticTag.new
+		  @new_tag = SemanticTag.new
 			@new_tag.tag = params[:semantic_tag]
 			@new_tag.save
 			@annotation.tag_id = @new_tag.id
@@ -142,38 +130,122 @@ def newAnno(params)
 				 end #end for t
 			end #end if @semantic_tags		
 		end	#end for x
-    end #end if @videos
-    return @annotation.id  ## returns annotation id of newly created annotation
-end #end def newAnno  
+  end #end if @videos
+    
+  @ret = {}
+  @ret[:id] = @annotation.id
+  @ret[:status] = 200
+  do
+    render :json => @ret
+  end
+end #end def addAnnotation
+	
+
   
 ############ EDIT ANNOTATION   
   
 def editAnnotation ## accepts annotation id
-    @annot_id = params[:id]   ## original anno id
-    dep_array = {}
-    dep_array[:id] = @annot_id
-    deprecate(dep_array)      ## sets the "deprecated" field of the old annotation to "true"
-    new_anno(params)          ## creates new annotation
-    
-end #end def editAnnotation
   
-private
-def deprecate(params) ## accepts annotation id, private intra-file function only
-    search_term = params[:id]
-    @annotation = Annotation.search(search_term).order("created_at DESC")
+  search_term = params[:id]
+  @annotation = Annotation.search(search_term).order("created_at DESC")
 	if @annotation.present?
-      	for x in @annotations
+    for x in @annotations
 			x.deprecated = true
 		end
 	end
- end #end def deprecate 
+    
+  @x = params[:annotation]
+	  
+  @annotation = Annotation.new
+  @annotation.annotation = params[:annotation]
+  @annotation.pointsArray = params[:pointsArray]
+  @annotation.beginTime = params[:beginTime]
+  @annotation.endTime = params[:endTime]
+  #@annotation.tags = params[:tags]
+  @annotation.user_id = nil#session[:user_id]
+  if params[:id]  ## if an old annotation id is supllied, this is an edit and we should create a pointer to the old annotation
+    @annotation.Prev_Anno_ID = params[:id]
+  end
+    
+  @videos = [] 
+  @location = params[:location]
+  @semantic_tags = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
+ 			
+  @location = Location.search(@location).order("created_at DESC") ## pulls location IDs
+  #if @location.present?
+  @videos = Video.select("id", "title", "author", "location_ID").where(:location_ID => @location)
+  #@videos = Video.search(params[:video_title]).order("created_at DESC")    
+  if @videos.empty?	
+    @video = Video.new
+    @video.title = params[:video_title]
+  	@video.author = params[:video_author]
+  	@new_location = Location.new
+    @new_location.location = params[:location]
+  	@new_location.save
+  	@video.save
+    @video.location_id = @new_location.id
+  	@annotation.video_id = @video.id
+    @annotation.location_id = @new_location.id
+  	@video.save
+  	@annotation.save
+
+  	if @semantic_tags.empty?
+  	  @new_tag = SemanticTag.new
+  		@new_tag.tag = params[:semantic_tag]
+  		@new_tag.save
+  		@annotation.tag_id = @new_tag.id
+  		@annotation.save
+  	else		
+  		for t in @semantic_tags
+  			@annotation.tag_id = t.id
+  			@annotation.save
+  		end #end for t
+  	end #end if @semantic_tags
+  else # if video is alrady present
+    for x in @videos
+  	  id_num = x.id
+  		loc_id = x.location_id	
+  		@annotation.video_id = id_num
+  		@annotation.location_id = loc_id
+  		@annotation.save
+				
+  		if @semantic_tags.empty?
+  		  @new_tag = SemanticTag.new
+  			@new_tag.tag = params[:semantic_tag]
+  			@new_tag.save
+  			@annotation.tag_id = @new_tag.id
+  			@annotation.save
+  		else		
+  			for t in @semantic_tags
+  				@annotation.tag_id = t.id
+  				@annotation.save
+  			  end #end for t
+  		end #end if @semantic_tags		
+  	 end	#end for x
+    end #end if @videos
+    
+    @ret = {}
+    @ret[:id] = @annotation.id
+    @ret[:status] = 200
+    do
+      render :json => @ret
+    end
+end #end def editAnnotation
   
- def deleteAnnotation ## accepts annotation id
- 	param_array = {}
-    param_array[:id] = params[:id]
-    #param_array[:updated_pointer] = nil     ## Since we're just "deleting" the annotation, the "updated_pointer" field can point to nil
-         ## !!!  (UPDATE: Not including a pointer on the old anno to the new annos, so this is irrelevent)
-	deprecate(param_array)
+###### DELETE ANNOTATION  
+def deleteAnnotation ## accepts annotation id
+  search_term = params[:id]
+  @annotation = Annotation.search(search_term).order("created_at DESC")
+  if @annotation.present?
+    for x in @annotations
+      x.deprecated = true
+	  end
+  end
+  @ret = {}
+  @ret[:status] = 200
+  do
+    render :json => @ret
+  end
 end #end def depreciateAnnotation
   
   
