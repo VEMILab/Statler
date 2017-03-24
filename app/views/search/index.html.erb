@@ -1,0 +1,22 @@
+<body style="margin-left: 40px; background-color: black">
+<h1 style="color:white; font-family:courier; ">yo! it's a rails server!</h1>
+<p><p>
+<h2 style="color:white; font-family:courier; ">
+<% search_helper %>
+<% count = 0 %>
+<% @returns.each do |t| %>
+	<% vids = Video.select("title", "location_id").where(:id => t.video_id) %>
+	<% vid_title = vids[0].title %>
+	<% locations = Location.select("location").where(:id => vids[0].location_id) %>
+	<% vid_loc = locations[0].location %>
+	<% user = User.select("name").where(:id => t.user_id) %>
+	<% if (user.blank?) then %>
+		<% user_name = "Unknown" %>
+		<% else user_name = user[0].name %>
+	<% end %>
+	<% x = "#{count+1}:<br>Annotation: #{t.annotation} <br>Video: #{vid_title}<br>Video Location: #{vid_loc}<br>Annotation created by: #{user_name}" %>
+	<p><%== x %> </p>
+	<% count += 1 %>
+<% end %>
+<p><p>
+</body>

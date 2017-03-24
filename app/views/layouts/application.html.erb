@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<p><p>
+
+<head>
+  <title>DartmouthTest</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<h3 style="color:white; font-family:courier; ">
+<% if current_user %>
+  Signed in as <%= current_user.name %> | <%= link_to "Log Out", '/logout' %>
+<% else %>
+  <%= link_to 'Log In',  '/login' %> | <%= link_to 'Sign Up', '/signup' %>
+<% end %>
+
+
+<%= yield %>
+
+</body>
+</html>
