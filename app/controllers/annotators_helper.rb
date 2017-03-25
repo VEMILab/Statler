@@ -109,7 +109,7 @@ def addAnnotation
 				@annotation.save
 			end #end for t
 		end #end if @semantic_tags
-    else # if video is alrady present
+    else # if video is already present
   	  	for x in @videos
 		    id_num = x.id
 			loc_id = x.location_id	
@@ -135,9 +135,7 @@ def addAnnotation
   @ret = {}
   @ret[:id] = @annotation.id
   @ret[:status] = 200
-  do
-    render :json => @ret
-  end
+  render :json => @ret
 end #end def addAnnotation
 	
 
@@ -219,7 +217,7 @@ def editAnnotation ## accepts annotation id
   			for t in @semantic_tags
   				@annotation.tag_id = t.id
   				@annotation.save
-  			  end #end for t
+  			end #end for t
   		end #end if @semantic_tags		
   	 end	#end for x
     end #end if @videos
@@ -227,9 +225,7 @@ def editAnnotation ## accepts annotation id
     @ret = {}
     @ret[:id] = @annotation.id
     @ret[:status] = 200
-    do
-      render :json => @ret
-    end
+    render :json => @ret
 end #end def editAnnotation
   
 ###### DELETE ANNOTATION  
@@ -243,9 +239,7 @@ def deleteAnnotation ## accepts annotation id
   end
   @ret = {}
   @ret[:status] = 200
-  do
-    render :json => @ret
-  end
+  render :json => @ret
 end #end def depreciateAnnotation
   
   
