@@ -148,7 +148,7 @@ def editAnnotation ## accepts annotation id
   @annotation = Annotation.search(search_term).order("created_at DESC")
 	if @annotation.present?
     for x in @annotations
-			x.deprecated = true
+	x.deprecated = true
 		end
 	end
     
@@ -234,7 +234,9 @@ def deleteAnnotation ## accepts annotation id
   @annotation = Annotation.search(search_term).order("created_at DESC")
   if @annotation.present?
     for x in @annotations
-      x.deprecated = true
+    ##  x.deprecated = true
+	## Destroy annotation 
+	x.destroy
 	  end
   end
   @ret = {}
