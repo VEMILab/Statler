@@ -12,7 +12,6 @@ class Annotation < ActiveRecord::Base
 		where("id" == "%#{search}%")
 ##	elsif search.respond_to?(:to_s)
 	where("annotation like ?" OR "id like ?", "%#{search}%")
-	end
 
 	end #end of search()
 	
