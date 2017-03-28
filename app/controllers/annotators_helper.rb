@@ -234,6 +234,7 @@ def deleteAnnotation ## accepts annotation id
   if @annotation.present?
     for x in @annotations
       x.deprecated = true
+			x.save
 	## Destroy annotation 
 	  end
   end
