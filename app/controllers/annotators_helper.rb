@@ -71,13 +71,13 @@ def addAnnotation
   #@annotation.tags = params[:tags]
   @annotation.user_id = nil#session[:user_id]
   if params[:id]  ## if an old annotation id is supllied, this is an edit and we should create a pointer to the old annotation
-    @annotation.Prev_Anno_ID = params[:id]
+    @annotation.prev_anno_ID = params[:id]
   end
 
       
   @videos = [] 
   @location = params[:location]
-  @semantic_tags = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
+  @semantic_tags = Semantic_Tag.search(params[:semantic_tag]).order("created_at DESC")
  			
 	@location = Location.search(@location).order("created_at DESC") ## pulls location IDs
 	#if @location.present?
@@ -98,7 +98,7 @@ def addAnnotation
 		@annotation.save
 
 		if @semantic_tags.empty?
-		  @new_tag = SemanticTag.new
+		  @new_tag = Semantic_Tag.new
 			@new_tag.tag = params[:semantic_tag]
 			@new_tag.save
 			@annotation.tag_id = @new_tag.id
@@ -118,7 +118,7 @@ def addAnnotation
 			@annotation.save
 				
 			if @semantic_tags.empty?
-			    @new_tag = SemanticTag.new
+			    @new_tag = Semantic_Tag.new
 			    @new_tag.tag = params[:semantic_tag]
 				@new_tag.save
 				@annotation.tag_id = @new_tag.id
@@ -145,7 +145,7 @@ end #end def addAnnotation
 def editAnnotation ## accepts annotation id
   
   search_term = params[:id]
-  @annotation = Annotation.search(search_term).order("created_at DESC")
+  @annotation = Annotation.id_search(search_term).order("created_at DESC")
 	if @annotation.present?
     for x in @annotations
 	x.deprecated = true
@@ -162,13 +162,12 @@ def editAnnotation ## accepts annotation id
   #@annotation.tags = params[:tags]
   @annotation.user_id = nil#session[:user_id]
   if params[:id]  ## if an old annotation id is supllied, this is an edit and we should create a pointer to the old annotation
-    @annotation.Prev_Anno_ID = params[:id]
+    @annotation.prev_anno_ID = params[:id]
   end
     
   @videos = [] 
   @location = params[:location]
-  @semantic_tags = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
- 			
+  @semantic_tags = Semantic_Tag.search(params[:semantic_tag]).order("created_at DESC") 			
   @location = Location.search(@location).order("created_at DESC") ## pulls location IDs
   #if @location.present?
   @videos = Video.select("id", "title", "author", "location_ID").where(:location_ID => @location)
@@ -188,7 +187,7 @@ def editAnnotation ## accepts annotation id
   	@annotation.save
 
   	if @semantic_tags.empty?
-  	  @new_tag = SemanticTag.new
+  	  @new_tag = Semantic_Tag.new
   		@new_tag.tag = params[:semantic_tag]
   		@new_tag.save
   		@annotation.tag_id = @new_tag.id
@@ -208,7 +207,7 @@ def editAnnotation ## accepts annotation id
   		@annotation.save
 				
   		if @semantic_tags.empty?
-  		  @new_tag = SemanticTag.new
+  		  @new_tag = Semantic_Tag.new
   			@new_tag.tag = params[:semantic_tag]
   			@new_tag.save
   			@annotation.tag_id = @new_tag.id
@@ -231,7 +230,7 @@ end #end def editAnnotation
 ###### DELETE ANNOTATION  
 def deleteAnnotation ## accepts annotation id
   search_term = params[:id]
-  @annotation = Annotation.search(search_term).order("created_at DESC")
+  @annotation = Annotation.id_search(search_term).order("created_at DESC")
   if @annotation.present?
     for x in @annotations
     ##  x.deprecated = true
