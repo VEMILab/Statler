@@ -9,9 +9,8 @@ class Annotation < ActiveRecord::Base
 	def self.search(search)
 	  #query to identify annotations where the 'annotation' field contains a partial or complete string resembling the user query
 	##if search.respond_to?(:to_i)	  
-		where("id" == "%#{search}%")
 ##	elsif search.respond_to?(:to_s)
-	where((Annotation.annotation LIKE "%#{search}%") OR (Annotation.id LIKE "%#{search}%"))
+	where ((annotation LIKE "%#{search}%") OR (id LIKE "%#{search}%"))
 
 	end #end of search()
 	
