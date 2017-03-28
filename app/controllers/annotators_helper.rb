@@ -132,10 +132,10 @@ def addAnnotation
 		end	#end for x
   end #end if @videos
     
-  @ret = {}
-  @ret[:id] = @annotation.id
-  @ret[:status] = 200
-  render :json => @ret
+  #@ret = {}
+  #@ret[:id] = @annotation.id
+  #@ret[:status] = 200
+  #render :json => @ret
 end #end def addAnnotation
 	
 
@@ -221,10 +221,10 @@ def editAnnotation ## accepts annotation id
   	 end	#end for x
     end #end if @videos
     
-    @ret = {}
-    @ret[:id] = @annotation.id
-    @ret[:status] = 200
-    render :json => @ret
+    #@ret = {}
+    #@ret[:id] = @annotation.id
+    #@ret[:status] = 200
+    #render :json => @ret
 end #end def editAnnotation
   
 ###### DELETE ANNOTATION  
@@ -233,14 +233,13 @@ def deleteAnnotation ## accepts annotation id
   @annotation = Annotation.search(search_term).order("created_at DESC")
   if @annotation.present?
     for x in @annotations
-    ##  x.deprecated = true
+      x.deprecated = true
 	## Destroy annotation 
-	x.destroy
 	  end
   end
-  @ret = {}
-  @ret[:status] = 200
-  render :json => @ret
+  #@ret = {}
+  #@ret[:status] = 200
+  #render :json => @ret
 end #end def depreciateAnnotation
   
   
