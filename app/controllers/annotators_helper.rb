@@ -145,7 +145,7 @@ end #end def addAnnotation
 def editAnnotation ## accepts annotation id
   
   search_term = params[:id]
-  @annotation = Annotation.id_search(search_term).order("created_at DESC")
+  @annotation = Annotation.search(search_term).order("created_at DESC")
 	if @annotation.present?
     for x in @annotations
 	x.deprecated = true
@@ -230,7 +230,7 @@ end #end def editAnnotation
 ###### DELETE ANNOTATION  
 def deleteAnnotation ## accepts annotation id
   search_term = params[:id]
-  @annotation = Annotation.id_search(search_term).order("created_at DESC")
+  @annotation = Annotation.search(search_term).order("created_at DESC")
   if @annotation.present?
     for x in @annotations
     ##  x.deprecated = true
