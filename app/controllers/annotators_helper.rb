@@ -77,7 +77,7 @@ def addAnnotation
       
   @videos = [] 
   @location = params[:location]
-  @semantic_tags = Semantic_Tag.search(params[:semantic_tag]).order("created_at DESC")
+  @semantic_tags = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
  			
 	@location = Location.search(@location).order("created_at DESC") ## pulls location IDs
 	#if @location.present?
@@ -98,7 +98,7 @@ def addAnnotation
 		@annotation.save
 
 		if @semantic_tags.empty?
-		  @new_tag = Semantic_Tag.new
+		  @new_tag = SemanticTag.new
 			@new_tag.tag = params[:semantic_tag]
 			@new_tag.save
 			@annotation.tag_id = @new_tag.id
@@ -118,7 +118,7 @@ def addAnnotation
 			@annotation.save
 				
 			if @semantic_tags.empty?
-			    @new_tag = Semantic_Tag.new
+			    @new_tag = SemanticTag.new
 			    @new_tag.tag = params[:semantic_tag]
 				@new_tag.save
 				@annotation.tag_id = @new_tag.id
@@ -167,7 +167,7 @@ def editAnnotation ## accepts annotation id
     
   @videos = [] 
   @location = params[:location]
-  @semantic_tags = Semantic_Tag.search(params[:semantic_tag]).order("created_at DESC") 			
+  @semantic_tags = SemanticTag.search(params[:semantic_tag]).order("created_at DESC") 			
   @location = Location.search(@location).order("created_at DESC") ## pulls location IDs
   #if @location.present?
   @videos = Video.select("id", "title", "author", "location_ID").where(:location_ID => @location)
@@ -187,7 +187,7 @@ def editAnnotation ## accepts annotation id
   	@annotation.save
 
   	if @semantic_tags.empty?
-  	  @new_tag = Semantic_Tag.new
+  	  @new_tag = SemanticTag.new
   		@new_tag.tag = params[:semantic_tag]
   		@new_tag.save
   		@annotation.tag_id = @new_tag.id
@@ -207,7 +207,7 @@ def editAnnotation ## accepts annotation id
   		@annotation.save
 				
   		if @semantic_tags.empty?
-  		  @new_tag = Semantic_Tag.new
+  		  @new_tag = SemanticTag.new
   			@new_tag.tag = params[:semantic_tag]
   			@new_tag.save
   			@annotation.tag_id = @new_tag.id
