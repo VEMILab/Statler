@@ -28,6 +28,9 @@ def getAnnotationsByLocation
 						
 					end
 
+					tag_strings = semantic_tags.collect(&:tag)
+					logger.info tag_strings
+
 
 					#@annos.push(getAnnotationInfo(x)) <-- originally started pulling functionality into private function, added complexity seemed to outweigh readability
 					video = Video.select("title", "location_ID").where(:ID => x.video_id)
