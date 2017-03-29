@@ -144,14 +144,12 @@ end #end def addAnnotation
   
 def editAnnotation ## accepts annotation id
   
-  search_term = params[:id]
-  @annotation = Annotation.search(search_term).order("created_at DESC")
-	if @annotation.present?
-    for x in @annotations
-			x.deprecated = true
-		end
-	end
+	# Deprecate the old annotation
+  old_video_ID = params[:id]
+  edit_anno = Annotation.find_by(id: old_video_ID)
+	edit_anno.update(deprecated: true)
     
+	# Create a new annotation linking back to the old one.
   @x = params[:annotation]
 	  
   @annotation = Annotation.new
