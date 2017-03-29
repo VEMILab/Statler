@@ -17,33 +17,32 @@ def getAnnotationsByLocation
           ## WRAP this next bit in an if/else: if not deprecated, do this, else call function on next newest
           if x.deprecated
             next
-          else
-            #@annos.push(getAnnotationInfo(x)) <-- originally started pulling functionality into private function, added complexity seemed to outweigh readability
-          	video = Video.select("title", "location_ID").where(:ID => x.video_id)
-          	location = Location.select("location").where(:ID => x.location_id)
-          	user = User.select("name", "email").where(:ID => x.user_id)	
-          	anno = {}
+          end
+					#@annos.push(getAnnotationInfo(x)) <-- originally started pulling functionality into private function, added complexity seemed to outweigh readability
+					video = Video.select("title", "location_ID").where(:ID => x.video_id)
+					location = Location.select("location").where(:ID => x.location_id)
+					user = User.select("name", "email").where(:ID => x.user_id)	
+					anno = {}
 
-          	data = {}
-          	data[:text] = x.annotation
-          	data[:beginTime] = x.beginTime
-          	data[:endTime] = x.endTime
-          	data[:pointsArray] = x.pointsArray
-            #data[:tags] = x.tags
+					data = {}
+					data[:text] = x.annotation
+					data[:beginTime] = x.beginTime
+					data[:endTime] = x.endTime
+					data[:pointsArray] = x.pointsArray
+					#data[:tags] = x.tags
 
-          	meta = {}
-          	meta[:id] = x.id
-          	meta[:title] = video[0].title
-          	meta[:location] = location[0].location
-          	unless user[0].nil?
-          		meta[:userName] = user[0].name
-          		meta[:userEmail] = user[0].email
-          	end
+					meta = {}
+					meta[:id] = x.id
+					meta[:title] = video[0].title
+					meta[:location] = location[0].location
+					unless user[0].nil?
+						meta[:userName] = user[0].name
+						meta[:userEmail] = user[0].email
+					end
 
-          	anno[:data] = data
-          	anno[:metadata] = meta
-						@annos.push(anno) 
-          end #end if x.Depreciated
+					anno[:data] = data
+					anno[:metadata] = meta
+					@annos.push(anno)
           
 	  		end #end for x
 	  	end #end for v 
@@ -109,17 +108,18 @@ def addAnnotation
 				@annotation.save
 			end #end for t
 		end #end if @semantic_tags
-    else # if video is already present
-  	  	for x in @videos
-		    id_num = x.id
+
+  else # if video is already present
+		for x in @videos
+			id_num = x.id
 			loc_id = x.location_id	
 			@annotation.video_id = id_num
 			@annotation.location_id = loc_id
 			@annotation.save
 				
 			if @semantic_tags.empty?
-			    @new_tag = SemanticTag.new
-			    @new_tag.tag = params[:semantic_tag]
+				@new_tag = SemanticTag.new
+				@new_tag.tag = params[:semantic_tag]
 				@new_tag.save
 				@annotation.tag_id = @new_tag.id
 				@annotation.save
@@ -127,9 +127,10 @@ def addAnnotation
 				for t in @semantic_tags
 					@annotation.tag_id = t.id
 					@annotation.save
-				 end #end for t
+				end #end for t
 			end #end if @semantic_tags		
 		end	#end for x
+
   end #end if @videos
     
   #@ret = {}
