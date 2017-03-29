@@ -1,6 +1,8 @@
 class SemanticTag < ActiveRecord::Base
 
-  belongs_to :annotation
+##  belongs_to :annotation
+  has_many :tag_annotations
+  has many :annotations, :through => :tag_annotations
 
   def self.search(search)
 	  #query to identify videos where the 'title' field matches the annotation ID

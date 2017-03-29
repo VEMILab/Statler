@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170322142416) do
+ActiveRecord::Schema.define(version: 20170329162020) do
 
 # Could not dump table "annotations" because of following NoMethodError
 #   undefined method `[]' for nil:NilClass
@@ -49,6 +49,13 @@ ActiveRecord::Schema.define(version: 20170322142416) do
 
   create_table "semantic_tags", force: :cascade do |t|
     t.string   "tag"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tag_annotations", force: :cascade do |t|
+    t.integer  "anno_id"
+    t.integer  "tag_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

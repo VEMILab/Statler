@@ -3,7 +3,9 @@ class Annotation < ActiveRecord::Base
 	belongs_to :video
 	belongs_to :location
 	belongs_to :user
-	has_many :semantic_tags
+	has_many :tag_annotations
+	has_many :semantic_tags, :through => :tag_annotations
+	
 
 	#this should be searching itself, with the search parameter submitted by the user	
 	def self.search(search)
