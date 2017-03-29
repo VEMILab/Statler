@@ -23,7 +23,9 @@ def getAnnotationsByLocation
 					semantic_tags = x.semantic_tags
 					logger.info "Tags: #{semantic_tags}"
 					semantic_tags.each do |tag|
-						logger.info "Tag: #{tag}"
+						logger.info "Tag Object: #{tag}"
+						logger.info "Tag: #{tag.tag}"
+						
 					end
 
 
