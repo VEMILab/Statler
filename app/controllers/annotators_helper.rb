@@ -16,19 +16,21 @@ def getAnnotationsByLocation
 				for x in @annotations 
           ## WRAP this next bit in an if/else: if not deprecated, do this, else call function on next newest
           if x.deprecated
-            break
+            next
           else
             #@annos.push(getAnnotationInfo(x)) <-- originally started pulling functionality into private function, added complexity seemed to outweigh readability
           	video = Video.select("title", "location_ID").where(:ID => x.video_id)
           	location = Location.select("location").where(:ID => x.location_id)
           	user = User.select("name", "email").where(:ID => x.user_id)	
           	anno = {}
+
           	data = {}
           	data[:text] = x.annotation
           	data[:beginTime] = x.beginTime
           	data[:endTime] = x.endTime
           	data[:pointsArray] = x.pointsArray
             #data[:tags] = x.tags
+
           	meta = {}
           	meta[:id] = x.id
           	meta[:title] = video[0].title
@@ -37,21 +39,19 @@ def getAnnotationsByLocation
           		meta[:userName] = user[0].name
           		meta[:userEmail] = user[0].email
           	end
+
           	anno[:data] = data
           	anno[:metadata] = meta
+						@annos.push(anno) 
           end #end if x.Depreciated
-          @annos.push(anno) 
           
-	  			end #end for x
-	  		end #end for v 
-			@annohash = {}
-			@annohash[:annotations] = @annos
-	  		render :json => @annohash
-	  	else
-	  		@annohash = {}
-			@annohash[:annotations] = @annos
-	  		render :json => @annohash
-	  	end #end if @videos
+	  		end #end for x
+	  	end #end for v 
+	  end #end if @videos
+
+		@annohash = {}
+		@annohash[:annotations] = @annos
+		render :json => @annohash
 	end #end if @location
 end #end def getAnnotationsByLocation
 
@@ -148,7 +148,7 @@ def editAnnotation ## accepts annotation id
   @annotation = Annotation.search(search_term).order("created_at DESC")
 	if @annotation.present?
     for x in @annotations
-	x.deprecated = true
+			x.deprecated = true
 		end
 	end
     
@@ -230,14 +230,19 @@ end #end def editAnnotation
 ###### DELETE ANNOTATION  
 def deleteAnnotation ## accepts annotation id
   search_term = params[:id]
-  @annotation = Annotation.search(search_term).order("created_at DESC")
-  if @annotation.present?
-    for x in @annotations
-      x.deprecated = true
-			x.save
-	## Destroy annotation 
-	  end
-  end
+	# Find the annotation with the given ID
+	anno = Annotation.find_by(id: search_term)
+	anno.update(deprecated: true)
+
+	# @annotations = []
+  # @annotations = Annotation.search(search_term).order("created_at DESC")
+	# for a in @annotations
+	# 	@annotation = Annotation.select("deprecated").where(search_term => a.id)
+	# 	for x in @annotation
+  #   	x.deprecated = true
+	# 		x.save
+	#   end
+  # end
   #@ret = {}
   #@ret[:status] = 200
   #render :json => @ret
