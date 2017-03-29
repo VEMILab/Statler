@@ -10,7 +10,7 @@ class Annotation < ActiveRecord::Base
 	#this should be searching itself, with the search parameter submitted by the user	
 	def self.search(search)
 	  #query to identify annotations where the 'annotation' field contains a partial or complete string resembling the user query
-	where("annotation like ?", "%#{search}%")
+	where("annotation like \"%#{search}%\"")
 
 	end #end of search()
 	
