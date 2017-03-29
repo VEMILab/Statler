@@ -76,7 +76,11 @@ def addAnnotation
       
   @videos = [] 
   @location = params[:location]
-  @semantic_tags = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
+
+	@semantic_tags = []
+	if params[:semantic_tag]
+  	@semantic_tags = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
+	end
  			
 	@location = Location.search(@location).order("created_at DESC") ## pulls location IDs
 	#if @location.present?
@@ -96,19 +100,6 @@ def addAnnotation
 		@video.save
 		@annotation.save
 
-		if @semantic_tags.empty?
-		  @new_tag = SemanticTag.new
-			@new_tag.tag = params[:semantic_tag]
-			@new_tag.save
-			@annotation.tag_id = @new_tag.id
-			@annotation.save
-		else		
-			for t in @semantic_tags
-				@annotation.tag_id = t.id
-				@annotation.save
-			end #end for t
-		end #end if @semantic_tags
-
   else # if video is already present
 		for x in @videos
 			id_num = x.id
@@ -116,22 +107,18 @@ def addAnnotation
 			@annotation.video_id = id_num
 			@annotation.location_id = loc_id
 			@annotation.save
-				
-			if @semantic_tags.empty?
-				@new_tag = SemanticTag.new
-				@new_tag.tag = params[:semantic_tag]
-				@new_tag.save
-				@annotation.tag_id = @new_tag.id
-				@annotation.save
-			else		
-				for t in @semantic_tags
-					@annotation.tag_id = t.id
-					@annotation.save
-				end #end for t
-			end #end if @semantic_tags		
+
 		end	#end for x
 
   end #end if @videos
+
+	unless @semantic_tags.empty?
+		# BUG: This saves the last tag ID as the ID of the annotation
+		for t in @semantic_tags
+			@annotation.tag_id = t.id
+			@annotation.save
+		end #end for t
+	end #end if @semantic_tags
     
   #@ret = {}
   #@ret[:id] = @annotation.id
