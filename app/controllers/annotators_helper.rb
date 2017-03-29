@@ -21,7 +21,10 @@ def getAnnotationsByLocation
           end
 
 					@semantic_tags = x.semantic_tags
-					logger.info @semantic_tags
+
+					@semantic_tags.each do |tag|
+						logger.info tag
+					end
 
 
 					#@annos.push(getAnnotationInfo(x)) <-- originally started pulling functionality into private function, added complexity seemed to outweigh readability
