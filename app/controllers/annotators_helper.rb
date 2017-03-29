@@ -4,6 +4,7 @@ module AnnotatorsHelper
 ##################### SEARCH ANNOTATION BY LOCATION
 
 def getAnnotationsByLocation
+	logger.info "Getting annotations by location..."
 	search_term = params[:location]
 	@location = Location.search(search_term).order("created_at DESC") ## pulls location IDs
 	if @location.present?
@@ -12,12 +13,17 @@ def getAnnotationsByLocation
 
 		if @videos.present?
 			for v in @videos
-				@annotations = Annotation.select("beginTime", "endTime", "annotation", "ID", "video_ID", "location_ID", "user_ID", "pointsArray", "deprecated", "tags").where(:video_ID => v.id)
+				@annotations = Annotation.select("beginTime", "endTime", "annotation", "ID", "video_ID", "location_ID", "user_ID", "pointsArray", "deprecated").where(:video_ID => v.id)
 				for x in @annotations 
           ## WRAP this next bit in an if/else: if not deprecated, do this, else call function on next newest
           if x.deprecated
             next
           end
+
+					@semantic_tags = x.semantic_tags
+					logger.info @semantic_tags
+
+
 					#@annos.push(getAnnotationInfo(x)) <-- originally started pulling functionality into private function, added complexity seemed to outweigh readability
 					video = Video.select("title", "location_ID").where(:ID => x.video_id)
 					location = Location.select("location").where(:ID => x.location_id)
@@ -29,7 +35,7 @@ def getAnnotationsByLocation
 					data[:beginTime] = x.beginTime
 					data[:endTime] = x.endTime
 					data[:pointsArray] = x.pointsArray
-					#data[:tags] = x.tags
+					data[:tags] = @semantic_tags
 
 					meta = {}
 					meta[:id] = x.id
