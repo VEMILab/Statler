@@ -35,7 +35,7 @@ def getAnnotationsByLocation
 					data[:beginTime] = x.beginTime
 					data[:endTime] = x.endTime
 					data[:pointsArray] = x.pointsArray
-					data[:tags] = @semantic_tags
+					# data[:tags] = @semantic_tags
 
 					meta = {}
 					meta[:id] = x.id
