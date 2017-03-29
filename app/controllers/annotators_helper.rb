@@ -145,9 +145,7 @@ end #end def addAnnotation
 def editAnnotation ## accepts annotation id
   
 	# Deprecate the old annotation
-  old_video_ID = params[:id]
-  edit_anno = Annotation.find_by(id: old_video_ID)
-	edit_anno.update(deprecated: true)
+  deleteAnnotation
     
 	# Create a new annotation linking back to the old one.
   addAnnotation
