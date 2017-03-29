@@ -20,15 +20,15 @@ def getAnnotationsByLocation
             next
           end
 
-					semantic_tags = x.semantic_tags
-					logger.info "Tags: #{semantic_tags}"
-					semantic_tags.each do |tag|
-						logger.info "Tag Object: #{tag}"
-						logger.info "Tag: #{tag.tag}"
+					# semantic_tags = x.semantic_tags
+					# logger.info "Tags: #{semantic_tags}"
+					# semantic_tags.each do |tag|
+					# 	logger.info "Tag Object: #{tag}"
+					# 	logger.info "Tag: #{tag.tag}"
 						
-					end
+					# end
 
-					tag_strings = semantic_tags.collect(&:tag)
+					tag_strings = x.semantic_tags.collect(&:tag)
 					logger.info tag_strings
 
 
