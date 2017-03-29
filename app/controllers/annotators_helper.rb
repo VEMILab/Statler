@@ -150,7 +150,7 @@ def editAnnotation ## accepts annotation id
 	edit_anno.update(deprecated: true)
     
 	# Create a new annotation linking back to the old one.
-  addAnnotation params
+  addAnnotation
 end #end def editAnnotation
   
 ###### DELETE ANNOTATION  
