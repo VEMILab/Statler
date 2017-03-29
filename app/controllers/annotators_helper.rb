@@ -77,6 +77,8 @@ def addAnnotation
   @videos = [] 
   @location = params[:location]
 
+	logger.info params[:semantic_tag]
+
 	@semantic_tags = []
 	if params[:semantic_tag]
   	@semantic_tags = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
