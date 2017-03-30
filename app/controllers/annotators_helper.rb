@@ -84,16 +84,16 @@ def addAnnotation
   @semantic_tag_check_new = []
 
 	#if semantic tags are present
-  	if params[:semantic_tag]
+  unless params[:tags].nil?
 		#for each element in the array
-		    params[:semantic_tags].each do |t|
+		params[:tags].each do |tag|
 			#individually check to see if it already exists
-			@tag_check = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
+			@tag_check = SemanticTag.search(tag).order("created_at DESC")
 			#if it does, add to existing semantic tags array, if not add to new semantic tag array			
 			if !tag_check.empty?
 				@semantic_tag_check_old.push(tag_check.tag)
 			else
-			   	@semantic_tag_check_new.push(t)
+			  @semantic_tag_check_new.push(tag)
 			end
 		end
 	end
@@ -129,13 +129,10 @@ def addAnnotation
 
   end #end if @videos
 
-
-#probably none of this works 
-
 	if @semantic_tags_check_old	
 		# iterate through tags that were previously in the db, edit
 		for t in @semantic_tag_check_old
-			@annotation.tag_id = t.id
+			#@annotation.tag_id = t.id
 			@tags_annotations.semantic_tag_id = t.id
 			@tags_annotations.annotation_id = annotation.id
 			@annotation.save
@@ -145,22 +142,21 @@ def addAnnotation
 	if @semantic_tag_check_new
 		# iterate through tags that are new to the db, create/edit
 		for t in @semantic_tag_check_new
-		new_tag = SemanticTag.new
-			@new_tag.tag = t
-			#@annotation.tag_id = new_tag.id
+			new_tag = SemanticTag.new
+			new_tag.tag = t
 			
-			#@tags_annotations.semantic_tag_id = new_tag.id
-			#@tags_annotations.annotation_id = annotation.id
+			@tags_annotations.semantic_tag_id = new_tag.id
+			@tags_annotations.annotation_id = @annotation.id
 			@annotation.save
-			#@tags_annotations.save
+			@tags_annotations.save
 			@semantic_tags.save
 		end
 	end #end if @semantic_tags
     
-  #@ret = {}
-  #@ret[:id] = @annotation.id
+  @ret = {}
+  @ret[:id] = @annotation.id
   #@ret[:status] = 200
-  #render :json => @ret
+  render :json => @ret
 end #end def addAnnotation
 	
 
