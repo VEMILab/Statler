@@ -79,24 +79,22 @@ def addAnnotation
 
 	#logger.info params[:semantic_tag]
 
-	@semantic_tags = []
-	@semantic_tag_check_old = []
-	@semantic_tag_check_new = []
+  @semantic_tag_check_old = []
+  @semantic_tag_check_new = []
 
 	#if semantic tags are present
-	if params[:semantic_tag]
+  	if params[:semantic_tag]
 		#for each element in the array
 		for params[:semantic_tags].each do |t|
 			#individually check to see if it already exists
 			tag_check = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
 			#if it does, add to existing semantic tags array, if not add to new semantic tag array			
 			if tag_check
-				@semantic_tag_check_old.push(tag.check)
+				@semantic_tag_check_old.push(tag_check.tag)
 			else
-			   semantic_tag_check_new.push(t)
+			   	@semantic_tag_check_new.push(t)
 			end
 		end
-
 	end
 	#end
  			
