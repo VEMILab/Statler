@@ -4,7 +4,6 @@ module AnnotatorsHelper
 ##################### SEARCH ANNOTATION BY LOCATION
 
 def getAnnotationsByLocation
-	logger.info "Getting annotations by location..."
 	search_term = params[:location]
 	@location = Location.search(search_term).order("created_at DESC") ## pulls location IDs
 	if @location.present?
@@ -13,25 +12,12 @@ def getAnnotationsByLocation
 
 		if @videos.present?
 			for v in @videos
-				@annotations = Annotation.select("beginTime", "endTime", "annotation", "ID", "video_ID", "location_ID", "user_ID", "pointsArray", "deprecated").where(:video_ID => v.id)
+				@annotations = Annotation.select("beginTime", "endTime", "annotation", "ID", "video_ID", "location_ID", "user_ID", "pointsArray", "deprecated", "tags").where(:video_ID => v.id)
 				for x in @annotations 
           ## WRAP this next bit in an if/else: if not deprecated, do this, else call function on next newest
           if x.deprecated
             next
           end
-
-					# semantic_tags = x.semantic_tags
-					# logger.info "Tags: #{semantic_tags}"
-					# semantic_tags.each do |tag|
-					# 	logger.info "Tag Object: #{tag}"
-					# 	logger.info "Tag: #{tag.tag}"
-						
-					# end
-
-					tag_strings = x.semantic_tags.collect(&:tag)
-					logger.info tag_strings
-
-
 					#@annos.push(getAnnotationInfo(x)) <-- originally started pulling functionality into private function, added complexity seemed to outweigh readability
 					video = Video.select("title", "location_ID").where(:ID => x.video_id)
 					location = Location.select("location").where(:ID => x.location_id)
@@ -43,7 +29,7 @@ def getAnnotationsByLocation
 					data[:beginTime] = x.beginTime
 					data[:endTime] = x.endTime
 					data[:pointsArray] = x.pointsArray
-					data[:tags] = tag_strings
+					#data[:tags] = x.tags
 
 					meta = {}
 					meta[:id] = x.id
@@ -83,7 +69,7 @@ def addAnnotation
 	@annotation.endTime = params[:endTime]
   #@annotation.tags = params[:tags]
   @annotation.user_id = nil#session[:user_id]
-  if params[:id]  ## if an old annotation id is supllied, this is an edit and we should create a pointer to the old annotation
+  if params[:id]  ## if an old annotation id is supplied, this is an edit and we should create a pointer to the old annotation
     @annotation.prev_anno_ID = params[:id]
   end
 
@@ -94,8 +80,24 @@ def addAnnotation
 	#logger.info params[:semantic_tag]
 
 	@semantic_tags = []
-	#if params[:semantic_tag]
-  #	@semantic_tags = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
+	@semantic_tag_check_old = []
+	@semantic_tag_check_new = []
+
+	#if semantic tags are present
+	if params[:semantic_tag]
+		#for each element in the array
+		for params[:semantic_tags].each do |t|
+			#individually check to see if it already exists
+			tag_check = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
+			#if it does, add to existing semantic tags array, if not add to new semantic tag array			
+			if tag_check
+				@semantic_tag_check_old.push(tag.check)
+			else
+			   semantic_tag_check_new.push(t)
+			end
+		end
+
+	end
 	#end
  			
 	@location = Location.search(@location).order("created_at DESC") ## pulls location IDs
@@ -128,12 +130,31 @@ def addAnnotation
 
   end #end if @videos
 
-	unless @semantic_tags.empty?
-		# BUG: This saves the last tag ID as the ID of the annotation
-		for t in @semantic_tags
+
+#probably none of this works 
+
+	if @semantic_tags_check_old	
+		# iterate through tags that were previously in the db, edit
+		for t in @semantic_tag_check_old
 			@annotation.tag_id = t.id
+			@tags_annotations.semantic_tag_id = t.id
+			@tags_annotations.annotation_id = annotation.id
 			@annotation.save
-		end #end for t
+			@tags_annotations.save
+		end
+	end	
+	if @semantic_tag_check_new
+		# iterate through tags that are new to the db, create/edit
+		for t in @semantic_tag_check_new
+		new_tag = SemanticTag.new
+			@new_tag.tag = t
+			@annotation.tag_id = new_tag.id
+			@tags_annotations.semantic_tag_id = new_tag.id
+			@tags_annotations.annotation_id = annotation.id
+			@annotation.save
+			@tags_annotations.save
+			@semantic_tags.save
+		end
 	end #end if @semantic_tags
     
   #@ret = {}
