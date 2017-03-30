@@ -18,6 +18,9 @@ def getAnnotationsByLocation
           if x.deprecated
             next
           end
+
+					tag_strings = x.semantic_tags.collect(&:tag)
+
 					#@annos.push(getAnnotationInfo(x)) <-- originally started pulling functionality into private function, added complexity seemed to outweigh readability
 					video = Video.select("title", "location_ID").where(:ID => x.video_id)
 					location = Location.select("location").where(:ID => x.location_id)
@@ -29,7 +32,7 @@ def getAnnotationsByLocation
 					data[:beginTime] = x.beginTime
 					data[:endTime] = x.endTime
 					data[:pointsArray] = x.pointsArray
-					data[:tags] = x.tags
+					data[:tags] = tag_strings
 
 					meta = {}
 					meta[:id] = x.id
