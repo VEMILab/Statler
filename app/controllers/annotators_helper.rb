@@ -29,7 +29,7 @@ def getAnnotationsByLocation
 					data[:beginTime] = x.beginTime
 					data[:endTime] = x.endTime
 					data[:pointsArray] = x.pointsArray
-					#data[:tags] = x.tags
+					data[:tags] = x.tags
 
 					meta = {}
 					meta[:id] = x.id
