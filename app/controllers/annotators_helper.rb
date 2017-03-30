@@ -133,10 +133,10 @@ def addAnnotation
 		# iterate through tags that were previously in the db, edit
 		for t in @semantic_tag_check_old
 			#@annotation.tag_id = t.id
-			@tag_annotations.semantic_tag_id = t.id
-			@tag_annotations.annotation_id = annotation.id
+			@tag_annotation.semantic_tag_id = t.id
+			@tag_annotation.annotation_id = annotation.id
 			@annotation.save
-			@tag_annotations.save
+			@tag_annotation.save
 		end
 	end	
 	if @semantic_tag_check_new
@@ -145,10 +145,10 @@ def addAnnotation
 			new_tag = SemanticTag.new
 			new_tag.tag = t
 			
-			@tag_annotations.semantic_tag_id = new_tag.id
-			@tag_annotations.annotation_id = @annotation.id
+			@tag_annotation.semantic_tag_id = new_tag.id
+			@tag_annotation.annotation_id = @annotation.id
 			@annotation.save
-			@tag_annotations.save
+			@tag_annotation.save
 			@semantic_tags.save
 		end
 	end #end if @semantic_tags
