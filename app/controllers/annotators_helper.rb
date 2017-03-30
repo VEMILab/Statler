@@ -79,6 +79,7 @@ def addAnnotation
 
 	#logger.info params[:semantic_tag]
 
+  @tag_check = []	
   @semantic_tag_check_old = []
   @semantic_tag_check_new = []
 
@@ -87,9 +88,9 @@ def addAnnotation
 		#for each element in the array
 		for params[:semantic_tags].each do |t|
 			#individually check to see if it already exists
-			tag_check = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
+			@tag_check = SemanticTag.search(params[:semantic_tag]).order("created_at DESC")
 			#if it does, add to existing semantic tags array, if not add to new semantic tag array			
-			if tag_check
+			if !tag_check.empty?
 				@semantic_tag_check_old.push(tag_check.tag)
 			else
 			   	@semantic_tag_check_new.push(t)
@@ -97,7 +98,7 @@ def addAnnotation
 		end
 	end
 	#end
- 			
+	
 	@location = Location.search(@location).order("created_at DESC") ## pulls location IDs
 	#if @location.present?
 	@videos = Video.select("id", "title", "author", "location_ID").where(:location_ID => @location)
