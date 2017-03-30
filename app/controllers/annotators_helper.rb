@@ -129,29 +129,29 @@ def addAnnotation
 
   end #end if @videos
 
-	if @semantic_tags_check_old	
-		# iterate through tags that were previously in the db, edit
-		for t in @semantic_tag_check_old
-			#@annotation.tag_id = t.id
-			@tag_annotation.semantic_tag_id = t.id
-			@tag_annotation.annotation_id = annotation.id
-			@annotation.save
-			@tag_annotation.save
-		end
-	end	
-	if @semantic_tag_check_new
-		# iterate through tags that are new to the db, create/edit
-		for t in @semantic_tag_check_new
-			new_tag = SemanticTag.new
-			new_tag.tag = t
+	# if @semantic_tags_check_old	
+	# 	# iterate through tags that were previously in the db, edit
+	# 	for t in @semantic_tag_check_old
+	# 		#@annotation.tag_id = t.id
+	# 		@tag_annotation.semantic_tag_id = t.id
+	# 		@tag_annotation.annotation_id = annotation.id
+	# 		@annotation.save
+	# 		@tag_annotation.save
+	# 	end
+	# end	
+	# if @semantic_tag_check_new
+	# 	# iterate through tags that are new to the db, create/edit
+	# 	for t in @semantic_tag_check_new
+	# 		new_tag = SemanticTag.new
+	# 		new_tag.tag = t
 			
-			@tag_annotation.semantic_tag_id = new_tag.id
-			@tag_annotation.annotation_id = @annotation.id
-			@annotation.save
-			@tag_annotation.save
-			@semantic_tags.save
-		end
-	end #end if @semantic_tags
+	# 		@tag_annotation.semantic_tag_id = new_tag.id
+	# 		@tag_annotation.annotation_id = @annotation.id
+	# 		@annotation.save
+	# 		@tag_annotation.save
+	# 		@semantic_tags.save
+	# 	end
+	# end #end if @semantic_tags
     
   @ret = {}
   @ret[:id] = @annotation.id
