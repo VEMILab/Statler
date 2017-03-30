@@ -147,11 +147,12 @@ def addAnnotation
 		for t in @semantic_tag_check_new
 		new_tag = SemanticTag.new
 			@new_tag.tag = t
-			@annotation.tag_id = new_tag.id
-			@tags_annotations.semantic_tag_id = new_tag.id
-			@tags_annotations.annotation_id = annotation.id
+			#@annotation.tag_id = new_tag.id
+			
+			#@tags_annotations.semantic_tag_id = new_tag.id
+			#@tags_annotations.annotation_id = annotation.id
 			@annotation.save
-			@tags_annotations.save
+			#@tags_annotations.save
 			@semantic_tags.save
 		end
 	end #end if @semantic_tags
