@@ -52,9 +52,10 @@ function start_server {
 }
 
 function stop_server {
-
-    pkill -f rails
-    pkill -f ruby
+    killall -9 rails
+    pkill -1 -f rails
+    killall -9 ruby
+    pkill -1 -f ruby
     echo 'The server is now shut down.'
 }
 
