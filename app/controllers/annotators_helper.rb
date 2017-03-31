@@ -132,9 +132,9 @@ def addAnnotation
 
   end #end if @videos
 
-	unless @semantic_tags_check_old.empty?
+	unless @semantic_tag_check_old.empty?
 		# iterate through tags that were previously in the db, edit
-		@semantic_tags_check_old.each do |t|
+		@semantic_tag_check_old.each do |t|
 			#@annotation.tag_id = t.id
 			@tag_annotation.semantic_tag_id = t.id
 			@tag_annotation.annotation_id = @annotation.id
