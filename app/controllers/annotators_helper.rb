@@ -86,18 +86,17 @@ def addAnnotation
   @semantic_tag_check_old = []
   @semantic_tag_check_new = []
 
-	#if semantic tags are present
+	# If semantic tags are present
   unless params[:tags].nil?
-		#for each element in the array
 		params[:tags].each do |t|
-			#individually check to see if it already exists
+			# Check to see if the tag already exists
 			#tag_check = SemanticTag.search(t).order("created_at DESC")
 			tag_check = SemanticTag.find_by(tag: t)
 			#if it does, add to existing semantic tags array, if not add to new semantic tag array			
 			if tag_check.nil?
 				@semantic_tag_check_new.push(t)
 			else
-				@semantic_tag_check_old.push(tag_check.tag)
+				@semantic_tag_check_old.push(t)
 			end
 		end
 	end
@@ -133,29 +132,30 @@ def addAnnotation
 
   end #end if @videos
 
-	# if @semantic_tags_check_old	
-	# 	# iterate through tags that were previously in the db, edit
-	# 	for t in @semantic_tag_check_old
-	# 		#@annotation.tag_id = t.id
-	# 		@tag_annotation.semantic_tag_id = t.id
-	# 		@tag_annotation.annotation_id = annotation.id
-	# 		@annotation.save
-	# 		@tag_annotation.save
-	# 	end
-	# end	
-	# if @semantic_tag_check_new
-	# 	# iterate through tags that are new to the db, create/edit
-	# 	for t in @semantic_tag_check_new
-	# 		new_tag = SemanticTag.new
-	# 		new_tag.tag = t
+	unless @semantic_tags_check_old.empty?
+		# iterate through tags that were previously in the db, edit
+		@semantic_tags_check_old.each do |t|
+			#@annotation.tag_id = t.id
+			@tag_annotation.semantic_tag_id = t.id
+			@tag_annotation.annotation_id = @annotation.id
+			@annotation.save
+			@tag_annotation.save
+		end
+	end	
+
+	unless @semantic_tag_check_new.empty?
+		# iterate through tags that are new to the db, create/edit
+		@semantic_tag_check_new.each do |t|
+			new_tag = SemanticTag.new
+			new_tag.tag = t
 			
-	# 		@tag_annotation.semantic_tag_id = new_tag.id
-	# 		@tag_annotation.annotation_id = @annotation.id
-	# 		@annotation.save
-	# 		@tag_annotation.save
-	# 		@semantic_tags.save
-	# 	end
-	# end #end if @semantic_tags
+			@tag_annotation.semantic_tag_id = new_tag.id
+			@tag_annotation.annotation_id = @annotation.id
+			@annotation.save
+			@tag_annotation.save
+			@semantic_tags.save
+		end
+	end #end if @semantic_tags
     
   @ret = {}
   @ret[:id] = @annotation.id
