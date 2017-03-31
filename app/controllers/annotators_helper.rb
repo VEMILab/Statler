@@ -128,38 +128,23 @@ def addAnnotation
 		
 	end
 
-	# Remove TagAnnotation relations that are not represented by the tag list (remove deleted tags).
+	# Remove TagAnnotation relations that are not represented by the tag list (remove deleted tags from annotation).
+	if edit_mode && params[:tags] do
+		# Find the TagAnnotations attached to the annotation
+		existing_tagannotations = TagAnnotation.where(semantic_tag_id: @annotation.id)
 
-
-
-	# unless @semantic_tag_entry_old.empty?
-	# 	# iterate through tags that were previously in the db, edit
-	# 	@semantic_tag_entry_old.each do |t|
-	# 		#@annotation.tag_id = t.id
-	# 		@tag_annotation.semantic_tag_id = t.id
-	# 		@tag_annotation.annotation_id = @annotation.id
-	# 		@annotation.save
-	# 		@tag_annotation.save
-	# 	end
-	# end	
-
-	# unless @semantic_tag_entry_new.empty?
-	# 	# iterate through tags that are new to the db, create/edit
-	# 	@semantic_tag_entry_new.each do |t|
-	# 		tag_entry = SemanticTag.new
-	# 		tag_entry.tag = t
-			
-	# 		@tag_annotation.semantic_tag_id = tag_entry.id
-	# 		@tag_annotation.annotation_id = @annotation.id
-	# 		@annotation.save
-	# 		@tag_annotation.save
-	# 		@semantic_tags.save
-	# 	end
-	# end #end if @semantic_tags
+		# Any TagAnnotations that have SemanticTags that aren't in params[:tags] should be removed.
+		Array(existing_tagannotations).each do |tag_annotation|
+			value = SemanticTag.find_by(id: tag_annotation.semantic_tag_id)
+			if !value.in?(params[:tags]) do
+				# Remove the TagAnnotation from TagAnnotations
+				tag_annotation.destroy
+			end
+		end
+	end
     
   @ret = {}
   @ret[:id] = @annotation.id
-  #@ret[:status] = 200
   render :json => @ret
 end #end def addAnnotation
 	
