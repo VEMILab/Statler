@@ -130,8 +130,8 @@ def addAnnotation
 			tag_annotation.semantic_tag_id = new_tag.id
 			tag_annotation.annotation_id = @annotation.id
 			tag_annotation.save
-			@semantic_tags.save
-			@annotation.save
+			#@semantic_tags.save
+			#@annotation.save
 		end
 	end
 
