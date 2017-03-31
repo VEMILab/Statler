@@ -72,6 +72,7 @@ chmod +x ./server.sh
 
 * **Kendra Bird** - *VEMILab*
 * **Brenden Peters** - *VEMILab*
+* **Jonathan Cole** - *VEMILab* - [joncole.me](http://www.joncole.me)
 
 ## License
 
