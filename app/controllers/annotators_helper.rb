@@ -117,17 +117,8 @@ def addAnnotation
 
 	# Create SemanticTags for new tags
 	Array(params[:tags]).each do |tagStr|
-		# Check to see if the tag already exists
-		tag_entry = SemanticTag.find_by(tag: tagStr)
-		# If it doesn't, make a new SemanticTag and relate it to the annotation.	
-		if tag_entry.nil?
-			logger.info "Making new SemanticTag for \"" + tagStr + "\""
-			tag_entry = SemanticTag.new
-			tag_entry.tag = tagStr
-			tag_entry.save
-		else
-			logger.info "\"" + tagStr + "\" already has a SemanticTag"
-		end
+		# Find or create the SemanticTag for the tag
+		tag_entry = SemanticTag.find_or_create_by(tag: tagStr)
 
 		# Make a new TagAnnotation relating tag_entry to the annotation
 		tag_annotation = TagAnnotation.new
