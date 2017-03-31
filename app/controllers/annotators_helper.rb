@@ -63,8 +63,6 @@ end #end def getAnnotationsByLocation
 # Add check if annotation text and time and shape match any extant annotations?
 def addAnnotation
 	@x = params[:annotation]
-
-	logger.info params
 	  
 	### Create a new Annotation instance
 	@annotation = Annotation.new
@@ -116,24 +114,29 @@ def addAnnotation
   end
 
 	### Handle tags
-	@tag_check = []	
-  @semantic_tag_check_old = []
-  @semantic_tag_check_new = []
 
-	# If semantic tags are present, find the SemanticTag objects 
-	# that represent them or create new ones.
-  #if params[:tags]
-		params[:tags].each do |t|
-			# Check to see if the tag already exists
-			#tag_check = SemanticTag.search(t).order("created_at DESC")
-			tag_check = SemanticTag.find_by(tag: t)
-			#if it does, add to existing semantic tags array, if not add to new semantic tag array			
-			if tag_check.nil?
-				@semantic_tag_check_new.push(t)
-			end
+	# Create SemanticTags for new tags
+	Array(params[:tags]).each do |tagStr|
+		# Check to see if the tag already exists
+		#tag_check = SemanticTag.search(t).order("created_at DESC")
+		tag_check = SemanticTag.find_by(tag: tagStr)
+		# If it doesn't, make a new SemanticTag and relate it to the annotation.	
+		if tag_check.nil?
+			new_tag = SemanticTag.new
+			new_tag.tag = tagStr
+			new_tag.save
 
+			@tag_annotation.semantic_tag_id = new_tag.id
+			@tag_annotation.annotation_id = @annotation.id
+			@annotation.save
+			@tag_annotation.save
+			@semantic_tags.save
 		end
-	#end
+	end
+
+	# Remove SemanticTags that are not represented by the tag list (remove deleted tags).
+
+
 
 	# unless @semantic_tag_check_old.empty?
 	# 	# iterate through tags that were previously in the db, edit
