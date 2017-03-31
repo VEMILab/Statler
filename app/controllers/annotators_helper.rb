@@ -63,6 +63,8 @@ end #end def getAnnotationsByLocation
 # Add check if annotation text and time and shape match any extant annotations?
 def addAnnotation
 	@x = params[:annotation]
+
+	logger.info params
 	  
 	### Create a new Annotation instance
 	@annotation = Annotation.new
