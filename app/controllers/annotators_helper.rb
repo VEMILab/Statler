@@ -1,7 +1,7 @@
 module AnnotatorsHelper
 	
 
-##################### SEARCH ANNOTATION BY LOCATION
+############ SEARCH ANNOTATION BY LOCATION ############
 
 def getAnnotationsByLocation
 	search_term = params[:location]
@@ -58,13 +58,13 @@ def getAnnotationsByLocation
 end #end def getAnnotationsByLocation
 
 
-################# ADD ANNOTATION BY VIDEO LOCATION
+############ ADD ANNOTATION BY VIDEO LOCATION ############
 
 # Add check if annotation text and time and shape match any extant annotations?
 def addAnnotation
 	@x = params[:annotation]
 	  
-	## Modified from annotations_controller.rb
+	### Create a new Annotation instance
 	@annotation = Annotation.new
   @annotation.annotation = params[:annotation]
 	@annotation.pointsArray = params[:pointsArray]
@@ -72,44 +72,28 @@ def addAnnotation
 	@annotation.endTime = params[:endTime]
   #@annotation.tags = params[:tags]
   @annotation.user_id = nil#session[:user_id]
+
+	edit_mode = false
   if params[:id]  ## if an old annotation id is supplied, this is an edit and we should create a pointer to the old annotation
+		edit_mode = true
     @annotation.prev_anno_ID = params[:id]
   end
 
-      
-  @videos = [] 
-  @location = params[:location]
-
 	#logger.info params[:semantic_tag]
-
-  @tag_check = []	
-  @semantic_tag_check_old = []
-  @semantic_tag_check_new = []
-
-	# If semantic tags are present
-  unless params[:tags].nil?
-		params[:tags].each do |t|
-			# Check to see if the tag already exists
-			#tag_check = SemanticTag.search(t).order("created_at DESC")
-			tag_check = SemanticTag.find_by(tag: t)
-			#if it does, add to existing semantic tags array, if not add to new semantic tag array			
-			if tag_check.nil?
-				@semantic_tag_check_new.push(t)
-			else
-				@semantic_tag_check_old.push(t)
-			end
-		end
-	end
-	#end
 	
-	@location = Location.search(@location).order("created_at DESC") ## pulls location IDs
-	#if @location.present?
+	# Find the Location entry for the URL
+	@location = Location.search(params[:location]).order("created_at DESC") ## pulls location IDs
+	# Find the Video entries for the found Location
 	@videos = Video.select("id", "title", "author", "location_ID").where(:location_ID => @location)
   #@videos = Video.search(params[:video_title]).order("created_at DESC")    
+
   if @videos.empty?	
+		### If there is no Video associated with the Location, create a new one
+		# Make and populate Video
 	  @video = Video.new
     @video.title = params[:video_title]
 		@video.author = params[:video_author]
+		# Make and populate Location
 		@new_location = Location.new
     @new_location.location = params[:location]
 		@new_location.save
@@ -121,27 +105,44 @@ def addAnnotation
 		@annotation.save
 
   else # if video is already present
-		for x in @videos
-			id_num = x.id
-			loc_id = x.location_id	
-			@annotation.video_id = id_num
-			@annotation.location_id = loc_id
+		### If there are Videos associated with the Location, update the annotation to reference these.
+		for video in @videos
+			@annotation.video_id = video.id
+			@annotation.location_id = video.location_id	
 			@annotation.save
-
-		end	#end for x
-
-  end #end if @videos
-
-	unless @semantic_tag_check_old.empty?
-		# iterate through tags that were previously in the db, edit
-		@semantic_tag_check_old.each do |t|
-			#@annotation.tag_id = t.id
-			@tag_annotation.semantic_tag_id = t.id
-			@tag_annotation.annotation_id = @annotation.id
-			@annotation.save
-			@tag_annotation.save
 		end
-	end	
+  end
+
+	### Handle tags
+	@tag_check = []	
+  @semantic_tag_check_old = []
+  @semantic_tag_check_new = []
+
+	# If semantic tags are present, find the SemanticTag objects 
+	# that represent them or create new ones.
+  #if params[:tags]
+		params[:tags].each do |t|
+			# Check to see if the tag already exists
+			#tag_check = SemanticTag.search(t).order("created_at DESC")
+			tag_check = SemanticTag.find_by(tag: t)
+			#if it does, add to existing semantic tags array, if not add to new semantic tag array			
+			if tag_check.nil?
+				@semantic_tag_check_new.push(t)
+			end
+
+		end
+	#end
+
+	# unless @semantic_tag_check_old.empty?
+	# 	# iterate through tags that were previously in the db, edit
+	# 	@semantic_tag_check_old.each do |t|
+	# 		#@annotation.tag_id = t.id
+	# 		@tag_annotation.semantic_tag_id = t.id
+	# 		@tag_annotation.annotation_id = @annotation.id
+	# 		@annotation.save
+	# 		@tag_annotation.save
+	# 	end
+	# end	
 
 	# unless @semantic_tag_check_new.empty?
 	# 	# iterate through tags that are new to the db, create/edit
@@ -165,7 +166,7 @@ end #end def addAnnotation
 	
 
   
-############ EDIT ANNOTATION   
+############ EDIT ANNOTATION ############
   
 def editAnnotation ## accepts annotation id
   
@@ -176,7 +177,8 @@ def editAnnotation ## accepts annotation id
   addAnnotation
 end #end def editAnnotation
   
-###### DELETE ANNOTATION  
+############ DELETE ANNOTATION ############
+
 def deleteAnnotation ## accepts annotation id
   search_term = params[:id]
 	# Find the annotation with the given ID
