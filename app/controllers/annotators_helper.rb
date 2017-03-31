@@ -105,7 +105,7 @@ def addAnnotation
 		@annotation.save
 
   else # if video is already present
-		### If there are Videos associated with the Location, update the annotation to reference these.
+		### If there are Video entries associated with the Location, update the annotation to reference these.
 		for video in @videos
 			@annotation.video_id = video.id
 			@annotation.location_id = video.location_id	
@@ -118,31 +118,32 @@ def addAnnotation
 	# Create SemanticTags for new tags
 	Array(params[:tags]).each do |tagStr|
 		# Check to see if the tag already exists
-		#tag_check = SemanticTag.search(t).order("created_at DESC")
-		tag_check = SemanticTag.find_by(tag: tagStr)
+		tag_entry = SemanticTag.find_by(tag: tagStr)
 		# If it doesn't, make a new SemanticTag and relate it to the annotation.	
-		if tag_check.nil?
+		if tag_entry.nil?
 			logger.info "Making new SemanticTag for \"" + tagStr + "\""
-			new_tag = SemanticTag.new
-			new_tag.tag = tagStr
-			new_tag.save
-
-			tag_annotation = TagAnnotation.new
-			tag_annotation.semantic_tag_id = new_tag.id
-			tag_annotation.annotation_id = @annotation.id
-			tag_annotation.save
+			tag_entry = SemanticTag.new
+			tag_entry.tag = tagStr
+			tag_entry.save
 		else
 			logger.info "\"" + tagStr + "\" already has a SemanticTag"
 		end
+
+		# Make a new TagAnnotation relating tag_entry to the annotation
+		tag_annotation = TagAnnotation.new
+		tag_annotation.semantic_tag_id = tag_entry.id
+		tag_annotation.annotation_id = @annotation.id
+		tag_annotation.save
+		
 	end
 
-	# Remove SemanticTags that are not represented by the tag list (remove deleted tags).
+	# Remove TagAnnotation relations that are not represented by the tag list (remove deleted tags).
 
 
 
-	# unless @semantic_tag_check_old.empty?
+	# unless @semantic_tag_entry_old.empty?
 	# 	# iterate through tags that were previously in the db, edit
-	# 	@semantic_tag_check_old.each do |t|
+	# 	@semantic_tag_entry_old.each do |t|
 	# 		#@annotation.tag_id = t.id
 	# 		@tag_annotation.semantic_tag_id = t.id
 	# 		@tag_annotation.annotation_id = @annotation.id
@@ -151,13 +152,13 @@ def addAnnotation
 	# 	end
 	# end	
 
-	# unless @semantic_tag_check_new.empty?
+	# unless @semantic_tag_entry_new.empty?
 	# 	# iterate through tags that are new to the db, create/edit
-	# 	@semantic_tag_check_new.each do |t|
-	# 		new_tag = SemanticTag.new
-	# 		new_tag.tag = t
+	# 	@semantic_tag_entry_new.each do |t|
+	# 		tag_entry = SemanticTag.new
+	# 		tag_entry.tag = t
 			
-	# 		@tag_annotation.semantic_tag_id = new_tag.id
+	# 		@tag_annotation.semantic_tag_id = tag_entry.id
 	# 		@tag_annotation.annotation_id = @annotation.id
 	# 		@annotation.save
 	# 		@tag_annotation.save
