@@ -126,11 +126,12 @@ def addAnnotation
 			new_tag.tag = tagStr
 			new_tag.save
 
-			@tag_annotation.semantic_tag_id = new_tag.id
-			@tag_annotation.annotation_id = @annotation.id
-			@annotation.save
-			@tag_annotation.save
+			tag_annotation = TagAnnotation.new
+			tag_annotation.semantic_tag_id = new_tag.id
+			tag_annotation.annotation_id = @annotation.id
+			tag_annotation.save
 			@semantic_tags.save
+			@annotation.save
 		end
 	end
 
