@@ -91,12 +91,13 @@ def addAnnotation
 		#for each element in the array
 		params[:tags].each do |t|
 			#individually check to see if it already exists
-			tag_check = SemanticTag.search(t).order("created_at DESC")
+			#tag_check = SemanticTag.search(t).order("created_at DESC")
+			tag_check = SemanticTag.find_by(tag: t)
 			#if it does, add to existing semantic tags array, if not add to new semantic tag array			
-			if !tag_check.empty?
-				@semantic_tag_check_old.push(tag_check.tag)
+			if tag_check.nil?
+				@semantic_tag_check_new.push(t)
 			else
-			  @semantic_tag_check_new.push(t)
+				@semantic_tag_check_old.push(tag_check.tag)
 			end
 		end
 	end
