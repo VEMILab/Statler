@@ -122,6 +122,7 @@ def addAnnotation
 		tag_check = SemanticTag.find_by(tag: tagStr)
 		# If it doesn't, make a new SemanticTag and relate it to the annotation.	
 		if tag_check.nil?
+			logger.info "Making new SemanticTag for \"" + tagStr + "\""
 			new_tag = SemanticTag.new
 			new_tag.tag = tagStr
 			new_tag.save
@@ -130,8 +131,8 @@ def addAnnotation
 			tag_annotation.semantic_tag_id = new_tag.id
 			tag_annotation.annotation_id = @annotation.id
 			tag_annotation.save
-			#@semantic_tags.save
-			#@annotation.save
+		else
+			logger.info "\"" + tagStr + "\" already has a SemanticTag"
 		end
 	end
 
