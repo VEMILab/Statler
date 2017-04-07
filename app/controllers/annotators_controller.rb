@@ -27,16 +27,15 @@ class AnnotatorsController < ApplicationController
 	before_action :authenticate, only: [:addAnnotation, :deleteAnnotation, :editAnnotation]
 
 	def authenticate
-		# authenticate_or_request_with_http_basic do |username, password|
-		# 	user = User.find_by_name(username)
-		# 	logger.info "Found user: #{user.name}"
-		# 	if user
-		# 		return user.authenticate(password)
-		# 	end
+		authenticate_or_request_with_http_basic do |username, password|
+			user = User.find_by_name(username)
+			logger.info "Found user: #{user.name}"
+			if user
+				return user.authenticate(password)
+			end
 			
-		# 	return false
-		# end
-		false
+			return false
+		end
 	end
 
 	
