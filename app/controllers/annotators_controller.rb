@@ -1,6 +1,7 @@
 class AnnotatorsController < ApplicationController
 	skip_before_action :verify_authenticity_token
 
+	# http://knoxjeffrey.github.io/rails/2015/10/07/rails-api-with-authentication/
 	before_action :cors_preflight_check
 	after_action :cors_set_access_control_headers
 
