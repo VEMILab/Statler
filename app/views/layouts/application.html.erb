@@ -10,12 +10,13 @@
 </head>
 <body>
 <h3 style="color:white; font-family:courier; ">
-<a href="Home">Home</a> | 
+<%= link_to 'Home',  '/' %> | 
 <% if current_user %>
   Signed in as <%= current_user.name %> | <%= link_to "Log Out", '/logout' %>
 <% else %>
   <%= link_to 'Log In',  '/login' %> | <%= link_to 'Sign Up', '/signup' %>
 <% end %>
+</h3>
 
 
 <%= yield %>
