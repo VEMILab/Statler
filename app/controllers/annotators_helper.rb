@@ -71,8 +71,12 @@ def addAnnotation
 	@annotation.endTime = params[:endTime]
   #@annotation.tags = params[:tags]
   @annotation.user_id = nil#session[:user_id]
-	logger.info request.headers["HTTP_AUTHORIZATION"]
-	user = User.find_by_name(request.headers["HTTP_AUTHORIZATION"])
+
+	# Get username from auth header
+	header = request.headers["HTTP_AUTHORIZATION"]
+	token = header.split(" ").last
+	pair = Base64.decode(token).split(":")
+	user = User.find_by_name(pair.first)
 	if user
 		@annotation.user_id = user.id
 	end
