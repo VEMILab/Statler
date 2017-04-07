@@ -34,8 +34,8 @@ module DartmouthTest
 			# For development we want to allow all resources to be shared, but can be configured using
 			# filepaths and directory names; /etc/filedump/*
 			# Recommend: tailor paths to allow access to API files alone.
-			resource '/annotators',
-				:headers => 'any',
+			resource '/annotators/*',
+				:headers => 'Origin, Content-Type, Accept, Authorization, Token',
 				:methods => [:get, :post]
 				
 			resource '*', 

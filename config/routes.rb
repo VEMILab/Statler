@@ -18,7 +18,7 @@ Rails.application.routes.draw do
    post 'annotators/newanno' => 'annotators#newanno'
 	 post 'annotators/addAnnotation' => 'annotators#addAnnotation'
    post 'annotators/editAnnotation' => 'annotators#editAnnotation'
-   post 'deleteAnnotation' => 'annotators#deleteAnnotation'
+   post 'annotators/deleteAnnotation' => 'annotators#deleteAnnotation'
 
 # Configures store endpoint in your app
 mount AnnotatorStore::Engine, at: '/annotator_store'
