@@ -1,7 +1,7 @@
 module AnnotatorsHelper
 	
 included do
-	before_action: :authenticate, only: [:addAnnotation, :deleteAnnotation, :editAnnotation]
+	before_action :authenticate, only: [:addAnnotation, :deleteAnnotation, :editAnnotation]
 
 	def authenticate
 		authenticate_or_request_with_http_basic('Administration') do |username, password|
@@ -9,7 +9,7 @@ included do
 			!user.nil?
 		end
 	end
-	
+
 end
 
 ############ SEARCH ANNOTATION BY LOCATION ############
