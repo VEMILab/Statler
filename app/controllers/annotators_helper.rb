@@ -2,7 +2,7 @@ module AnnotatorsHelper
 	
 def self.included(base)
 	base.class_eval do
-		before_action :authenticate, only: [:addAnnotation, :deleteAnnotation, :editAnnotation]
+		base.before_action :authenticate, only: [:addAnnotation, :deleteAnnotation, :editAnnotation]
 
 		def authenticate
 			authenticate_or_request_with_http_basic('Administration') do |username, password|
