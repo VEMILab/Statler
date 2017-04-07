@@ -27,22 +27,21 @@ module DartmouthTest
 			# We want to allow all origins to access the backend right now, but this can be configured;
 			# regular expressions can be used to specify origins and multiple origins can be separated by commas.
 			# Recommend: individual institutions limit origins to domains where they are using the plugin.
-			origins '*' 
+			# origins '*'
 			#origins '141.114.251.243'
 			#origins '192.168.1.52', 'www.maine.edu/semantic-annotation-tool' -- etc.
 			
 			# For development we want to allow all resources to be shared, but can be configured using
 			# filepaths and directory names; /etc/filedump/*
 			# Recommend: tailor paths to allow access to API files alone.
-			resource '/annotators/*',
-				:headers => 'Origin, Content-Type, Accept, Authorization, Token',
-				:methods => [:get, :post]
+			# resource '/annotators/*',
+			# 	:headers => 'any',
+			# 	:methods => [:get, :post]
 				
+			origins '*'
 			resource '*', 
-				:methods => [:get, :post], #perhaps :options as well?
-				:headers => 'any'#,
-				#:expose  => ['Our-custom-response-header'],
-				#:max_age => 600
+				headers: :any,
+          		methods: [:get, :post, :delete, :put, :options]
 		end
 	end
 				

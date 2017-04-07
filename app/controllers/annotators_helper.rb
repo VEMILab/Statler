@@ -47,7 +47,7 @@ def getAnnotationsByLocation
 					@annos.push(anno)
           
 	  		end #end for x
-	  	end #end for v 
+	  	end #end for v
 	  end #end if @videos
 
 		@annohash = {}
