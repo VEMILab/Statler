@@ -75,7 +75,7 @@ def addAnnotation
 	# Get username from auth header
 	header = request.headers["HTTP_AUTHORIZATION"]
 	token = header.split(" ").last
-	pair = Base64.decode(token).split(":")
+	pair = Base64.decode64(token).split(":")
 	user = User.find_by_name(pair.first)
 	if user
 		@annotation.user_id = user.id
