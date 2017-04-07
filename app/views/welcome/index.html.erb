@@ -1,5 +1,5 @@
 <body style="margin-left: 40px; background-color: black">
-<h1 style="color:green; font-family:courier; ">yo! it's a rails server!</h1>
+<h1 style="color:green; font-family:courier; ">Statler Test Server</h1>
 <p><p>
 <h2 style="color:green; font-family:courier; ">
 <!--<%= welcome_helper %></h2>-->
@@ -39,18 +39,19 @@
 <p>
 <p>
 
-<h3 style="color:yellow; font-family:courier;">>Create new annotation:</h3>
-<%= form_tag("/annotation", method: "post") do %><br>
-      Annotation: <%= text_field_tag(:annotation)%><br>
-      Video Title: <%= text_field_tag(:video_title)%><br>
-      Video Author: <%= text_field_tag(:video_author) %><br>	
-      Video Location: <%= text_field_tag(:location)%><br>
-      Semantic Tag: <%= text_field_tag(:semantic_tag)%>
-      	
-      <%= submit_tag("Do It!") %>
+<h3 style="color:yellow; font-family:courier;">> Create new annotation:</h3>
+<%= form_tag("/annotation", method: "post") do %>
+  <p>
+    Annotation: <%= text_field_tag(:annotation)%><br>
+    Video Title: <%= text_field_tag(:video_title)%><br>
+    Video Author: <%= text_field_tag(:video_author) %><br>	
+    Video Location: <%= text_field_tag(:location)%><br>
+    Semantic Tag: <%= text_field_tag(:semantic_tag)%>
+  </p>
+  <%= submit_tag("Submit") %>
 <% end %>
 <p><p>
-<h3 style="color:yellow; font-family:courier;">>Search by annotation:</h3>
+<h3 style="color:yellow; font-family:courier;">> Search by annotation:</h3>
 <p>
 <div class="form">
 <border-style:solid>
@@ -65,7 +66,7 @@
 <% end %>
 </div>
 
-<h3 style="color:yellow; font-family:courier;">>Search by tag:</h3>
+<h3 style="color:yellow; font-family:courier;">> Search by tag:</h3>
 <p>
 <div class="form">
 <border-style:solid>
