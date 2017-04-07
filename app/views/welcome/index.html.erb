@@ -93,8 +93,9 @@
 	<%== @returns[0] %>
 <% else %>
 	<% @returns.each do |t| %> 
-		<% vid = Video.select("title").where(:id => t.video_id)[0].title %>
-		<% x = "#{count+1}:<br>Annotation: #{t.annotation} <br>Video: #{vid}<br>" %>
+		<% vid = Video.find_by(location_id: t.location_id) %>
+    <% loc = Location.find_by(id: t.location_id) %>
+		<% x = "#{count+1}:<br>Annotation: #{t.annotation} <br>Location: #{loc.location} <br>Title: #{vid.title}" %>
 		<p><%== x %> </p>
 		<% count += 1 %>
 	<% end %>
