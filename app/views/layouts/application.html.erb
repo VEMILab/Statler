@@ -10,6 +10,7 @@
 </head>
 <body>
 <h3 style="color:white; font-family:courier; ">
+<a href="Home">Home</a> | 
 <% if current_user %>
   Signed in as <%= current_user.name %> | <%= link_to "Log Out", '/logout' %>
 <% else %>
