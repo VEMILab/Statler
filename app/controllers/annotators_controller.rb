@@ -28,7 +28,7 @@ class AnnotatorsController < ApplicationController
 
 	def authenticate
 		authenticate_or_request_with_http_basic do |username, password|
-			user = User.find_by_username(username).authenticate(password)
+			user = User.find_by_name(username).authenticate(password)
 			!user.nil?
 		end
 	end
