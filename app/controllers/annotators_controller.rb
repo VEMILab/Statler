@@ -35,7 +35,6 @@ class AnnotatorsController < ApplicationController
 			end
 			
 			logger.info "No user found with name: #{username}"
-			return false
 		end
 	end
 
