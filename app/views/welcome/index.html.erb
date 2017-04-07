@@ -39,15 +39,21 @@
 <p>
 <p>
 
+<style type="text/css">
+  label {
+    display: inline-block;
+    float: left;
+    color: orange;
+  }
+</style>
+
 <h3 style="color:yellow; font-family:courier;">> Create new annotation:</h3>
 <%= form_tag("/annotation", method: "post") do %>
-  <p>
-    Annotation: <%= text_field_tag(:annotation)%><br>
-    Video Title: <%= text_field_tag(:video_title)%><br>
-    Video Author: <%= text_field_tag(:video_author) %><br>	
-    Video Location: <%= text_field_tag(:location)%><br>
-    Semantic Tag: <%= text_field_tag(:semantic_tag)%>
-  </p>
+    <label>Annotation:</label>      <%= text_field_tag(:annotation)%><br>
+    <label>Video Title:</label>     <%= text_field_tag(:video_title)%><br>
+    <label>Video Author:</label>    <%= text_field_tag(:video_author) %><br>	
+    <label>Video Location:</label>  <%= text_field_tag(:location)%><br>
+    <label>Semantic Tag:</label>    <%= text_field_tag(:semantic_tag)%>
   <%= submit_tag("Submit") %>
 <% end %>
 <p><p>
