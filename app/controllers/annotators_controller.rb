@@ -29,15 +29,9 @@ class AnnotatorsController < ApplicationController
 
 	def authenticate
 		logger.info "Authenticating..."
-		authenticate_or_request_with_http_basic do |username, password|
-			user = User.find_by_name(username)
-			if user
-				logger.info "Found user: #{user.name}"
-				user.authenticate(password)
-			else
-				logger.info "No user found with name: #{username}"
-				!user.nil?
-			end
+		authenticate_or_request_with_http_token do |token, options|
+			token == "test"
+			# User.find_by(token: token)
 		end
 	end
 
