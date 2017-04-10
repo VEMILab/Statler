@@ -1,7 +1,26 @@
 class AnnotationsController < ApplicationController
 
+    before_action :authorize
+
   # POST /annotations
+
+    def authorize
+        if !session[:current_user]
+            redirect_to '/login'
+        end
+
+        THROW AN ERROR PLS
+    end
+
+
+  def current_user
+    @current_user ||= User.find(session[:user_id]) if session[:user_id]
+  end
+
   def create
+
+  ##  before_action :authorize
+
     @annotation = Annotation.new
     @annotation.annotation = params[:annotation]
     @annotation.user_id = session[:user_id]
