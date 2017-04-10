@@ -30,6 +30,7 @@ class AnnotatorsController < ApplicationController
 	def authenticate
 		logger.info "Authenticating..."
 		authenticate_or_request_with_http_token do |token, options|
+			logger.info token
 			token == "test"
 			# User.find_by(token: token)
 		end
