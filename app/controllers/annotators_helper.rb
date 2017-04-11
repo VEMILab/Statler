@@ -179,6 +179,10 @@ def deleteAnnotation ## accepts annotation id
 	anno.update(deprecated: true)
 
 end
+
+def login
+	# Render the login info for the frontend to save.
+end
   
   
 end #end module
