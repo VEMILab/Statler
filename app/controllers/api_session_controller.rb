@@ -1,6 +1,6 @@
 
 
-class ApiSessionsController < AnnotatorsController
+class ApiSessionController < AnnotatorsController
 
     before_action :user_auth, only: [:login]
 	before_action :require_login!, only: [:addAnnotation, :deleteAnnotation, :editAnnotation]
