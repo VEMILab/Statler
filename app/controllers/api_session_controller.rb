@@ -183,7 +183,7 @@ class ApiSessionController < AnnotatorsController
         anno = Annotation.find_by(id: search_term)
         if anno
             anno.update(deprecated: true)
-            render :json => true
+            head :no_content
         else
             render :json => { errors: [ { detail: "Could not find annotation id=#{search_term} to delete." } ] }, status: 404
         end
@@ -208,7 +208,7 @@ class ApiSessionController < AnnotatorsController
         user = User.find_by(token: token)
         if user
             user.invalidate_auth_token
-            head :ok
+            head :no_content
         else
             render :json => { errors: [ { detail: "Could not log user out - user is likely not logged in" } ] }, status: 404
         end
