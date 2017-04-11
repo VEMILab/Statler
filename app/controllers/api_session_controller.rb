@@ -77,7 +77,7 @@ class ApiSessionController < AnnotatorsController
         #@annotation.tags = params[:tags]
         @annotation.user_id = nil#session[:user_id]
 
-        Get username from auth header
+        # Get username from auth header
         authHeader = request.headers["HTTP_AUTHORIZATION"]
         auth = authHeader.split(" ").last
         pair = auth.split("=")
@@ -184,7 +184,7 @@ class ApiSessionController < AnnotatorsController
         if anno
             anno.update(deprecated: true)
         else
-            render json: { errors: [ { detail: "Could not find annotation id=#{search_term} to delete." } ] }, status: 404
+            render :json => { errors: [ { detail: "Could not find annotation id=#{search_term} to delete." } ] }, status: 404
         end
 
     end
