@@ -4,16 +4,17 @@ class User < ActiveRecord::Base
   
   has_many :annotations
 
-	before_create :set_auth_token
-
-	
-	def set_auth_token
-		return if token.present?
-		self.token = generate_auth_token
+	def generate_auth_token
+		if token.present?
+			return token
+		end
+		token = SecureRandom.uuid.gsub(/\-/,'')
+		self.update_columns(token: token)
+		token
 	end
 
-	def generate_auth_token
-		SecureRandom.uuid.gsub(/\-/,'')
+	def invalidate_auth_token
+		self.update_columns(token: nil)
 	end
 
 	def self.search(search)
