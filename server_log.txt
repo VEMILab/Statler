@@ -1,0 +1,3 @@
+=> Booting WEBrick
+=> Rails 4.2.6 application starting in development on http://ec2-52-88-72-190.us-west-2.compute.amazonaws.com:3000
+=> Run `rails server -h` for more startup options

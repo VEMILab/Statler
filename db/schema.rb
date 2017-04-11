@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170329171801) do
+ActiveRecord::Schema.define(version: 20170411024905) do
 
 # Could not dump table "annotations" because of following NoMethodError
 #   undefined method `[]' for nil:NilClass
@@ -62,8 +62,10 @@ ActiveRecord::Schema.define(version: 20170329171801) do
     t.string   "name"
     t.string   "email"
     t.string   "password_digest"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.string   "token"
+    t.datetime "token_created_at"
   end
 
   create_table "videos", force: :cascade do |t|
