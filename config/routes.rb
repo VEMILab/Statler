@@ -16,11 +16,11 @@ Rails.application.routes.draw do
    get 'annotators/getAnnotationsByTitle' => 'annotators#getAnnotationsByTitle'
 	 get 'annotators/getAnnotationsByLocation' => 'annotators#getAnnotationsByLocation'
    post 'annotators/newanno' => 'annotators#newanno'
-	 post 'annotators/addAnnotation' => 'annotators#addAnnotation'
-   post 'annotators/editAnnotation' => 'annotators#editAnnotation'
-   post 'annotators/deleteAnnotation' => 'annotators#deleteAnnotation'
-   post 'annotators/login' => 'annotators#login'
-   delete 'annotators/logout' => 'annotators#logout'
+	 post 'annotators/addAnnotation' => 'api_session#addAnnotation'
+   post 'annotators/editAnnotation' => 'api_session#editAnnotation'
+   post 'annotators/deleteAnnotation' => 'api_session#deleteAnnotation'
+   post 'annotators/login' => 'api_session#login'
+   delete 'annotators/logout' => 'api_session#logout'
 
 # Configures store endpoint in your app
 mount AnnotatorStore::Engine, at: '/annotator_store'
