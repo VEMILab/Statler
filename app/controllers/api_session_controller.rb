@@ -183,7 +183,7 @@ class ApiSessionController < AnnotatorsController
         anno = Annotation.find_by(id: search_term)
         if anno
             anno.update(deprecated: true)
-            head :no_content
+            # head :no_content
         else
             render :json => { errors: [ { detail: "Could not find annotation id=#{search_term} to delete." } ] }, status: 404
         end
