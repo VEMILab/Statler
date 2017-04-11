@@ -9,12 +9,12 @@ class User < ActiveRecord::Base
 			return token
 		end
 		token = SecureRandom.uuid.gsub(/\-/,'')
-		self.update_columns(token: token)
+		self.update_columns(token: token, token_created_at: Time.zone.now)
 		token
 	end
 
 	def invalidate_auth_token
-		self.update_columns(token: nil)
+		self.update_columns(token: nil, token_created_at: nil)
 	end
 
 	def self.search(search)

@@ -3,7 +3,7 @@
 class ApiSessionController < AnnotatorsController
 
     before_action :user_auth, only: [:login]
-	before_action :require_login!, only: [:addAnnotation, :deleteAnnotation, :editAnnotation]
+	before_action :require_login!, only: [:logout, :addAnnotation, :deleteAnnotation, :editAnnotation]
 
     ############ SEARCH ANNOTATION BY LOCATION ############
 
@@ -202,9 +202,15 @@ class ApiSessionController < AnnotatorsController
     end
 
     def logout
-        user = session_user
-        user.invalidate_auth_token
-        head :ok
+        header = request.headers["HTTP_AUTHORIZATION"]
+        token = header.split(" ").last
+        user = User.find_by(token: token)
+        if user
+            user.invalidate_auth_token
+            head :ok
+        else
+            render :json => { errors: [ { detail: "Could not log user out - user is likely not logged in" } ] }, status: 404
+        end
     end
     
 
