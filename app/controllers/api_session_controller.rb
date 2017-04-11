@@ -210,7 +210,7 @@ class ApiSessionController < AnnotatorsController
             user.invalidate_auth_token
             head :no_content
         else
-            render :json => { errors: [ { detail: "Could not log user out - user is likely not logged in" } ] }, status: 404
+            render :json => { detail: "Could not log user out - token matches no users" }, status: 200
         end
     end
     
