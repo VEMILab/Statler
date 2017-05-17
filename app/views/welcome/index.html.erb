@@ -14,7 +14,6 @@
 <% end %>
 
 <br />
-<br />
 
 <h3>> Search by annotation:</h3>
 <br />
@@ -36,16 +35,15 @@
 </div>
 
 <br />
-<br />
 
 <h2>Here are the annotations that you have previously submitted:</h2>
 <% user_content_helper %>
 <% count = 0 %>
 <% if @returns == ["You need to be logged in to see annotations that you have submitted."] %>
-	<%== @returns[0] %>
+	<h2><%== @returns[0] %></h2>
 	
 <% elsif @returns == ["You have not submitted any annotations."] %>
-	<%== @returns[0] %>
+	<h2><%== @returns[0] %></h2>
 <% else %>
 	<% @returns.each do |t| %> 
 		<% vid = Video.select("title").where(:id => t.video_id)[0].title %>
