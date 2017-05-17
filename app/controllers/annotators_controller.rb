@@ -39,7 +39,7 @@ class AnnotatorsController < ApplicationController
 	end
 
 	def write_auth
-		authHeader = get_auth_type
+		type = get_auth_type
 		if type == "Token"
 			return token_auth
 		elsif type == "ApiKey"
