@@ -16,17 +16,16 @@
 <br />
 
 <h3>> Search by annotation:</h3>
-<br />
 <div class="form">
-
   <%= form_tag("/search", :method => "get", id: "search-form") do %>
     <%= text_field_tag :search, params[:search], placeholder: "Search Annotations:" %>
     <%= submit_tag "Search" %>
   <% end %>
 </div>
 
-<h3>> Search by tag:</h3>
 <br />
+
+<h3>> Search by tag:</h3>
 <div class="form">
   <%= form_tag("/searchtag", :method => "get", id: "search-form") do %>
     <%= text_field_tag :searchtag, params[:searchtag], placeholder: "Search Semantic Tags:" %>
@@ -34,16 +33,19 @@
   <% end %>
 </div>
 
+<!-- BEGIN SESSION GUARDED CONTENT -->
+<% if is_logged_in %>
+
 <br />
 
-<h2>Here are the annotations that you have previously submitted:</h2>
+<h3>> Your Annotations</h3>
 <% user_content_helper %>
 <% count = 0 %>
 <% if @returns == ["You need to be logged in to see annotations that you have submitted."] %>
-	<h2><%== @returns[0] %></h2>
+	<h3><%== @returns[0] %></h3>
 	
 <% elsif @returns == ["You have not submitted any annotations."] %>
-	<h2><%== @returns[0] %></h2>
+	<h3><%== @returns[0] %></h3>
 <% else %>
 	<% @returns.each do |t| %> 
 		<% vid = Video.select("title").where(:id => t.video_id)[0].title %>
@@ -53,6 +55,12 @@
 	<% end %>
 <% end %>
 
+<!-- END SESSION GUARDED CONTENT -->
+<% end %>
+
+<br />
+
+<h3>> Generate API Key</h3>
 <%= form_tag("/api/generateKey", method: "post") do %>
   <label>Application Name:</label> <%= text_field_tag(:application_name) %><br>
   <%= submit_tag("Create API Key") %>
@@ -71,6 +79,7 @@
     </tr>
   <% end %>
 </table>
+
 
 </body>
 

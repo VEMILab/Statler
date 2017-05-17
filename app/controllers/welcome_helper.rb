@@ -28,5 +28,17 @@ module WelcomeHelper
 	end 
 	return @return.to_s
 end 
+
+	def is_logged_in
+		if params[:username].present? #!= ("" or nil)
+		  @username = params[:username]
+		  #@password = params[:password]
+		  #fetch users from database
+		  return User.find_by(name: params[:username])
+		end
+
+		return false
+
+	end
 end
 

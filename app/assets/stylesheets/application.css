@@ -24,25 +24,34 @@ text_field{
 
 
 body {
-    margin-left: 40px; 
-    background-color: black
+  margin-left: 40px; 
+  background-color: black
 }
 label {
-    display: inline-block;
-    float: left;
-    width: 150px;
-    color: orange;
+  display: inline-block;
+  float: left;
+  width: 150px;
+  color: orange;
 }
 input {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 h1, h2 {
-    color:green; 
-    font-family:courier;
+  color:green; 
+  font-family:courier;
 }
 
 h3 {
-    color:yellow; 
-    font-family:courier;
+  color:yellow; 
+  font-family:courier;
+}
+
+table th {
+  color:yellow; 
+  font-family:courier;
+}
+
+table tr {
+  color: white;
 }
