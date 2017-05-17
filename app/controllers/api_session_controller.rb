@@ -91,10 +91,15 @@ class ApiSessionController < AnnotatorsController
             end
         elsif authType == "ApiKey"
             # Set user ID from email address param
-            User.find_or_create_by!(email: params[:email]) do |user|
-                logger.info user.inspect
-                logger.info user.id
-                logger.info user.email
+            user = User.find_by(email: params[:email])
+
+            if user
+                # Point the annotation to the found user
+                @annotation.user_id = user.id
+            else
+                # Make a new user and point the annotation to that
+                user = User.new(:name => params[:email], :email => params[:email], :pass => "pass")
+                user.save
                 @annotation.user_id = user.id
             end
         end
