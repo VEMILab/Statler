@@ -79,7 +79,7 @@ class ApiSessionController < AnnotatorsController
 
         # Get user ID from auth header
         authType = get_auth_type
-        logger.log authType
+        logger.info authType
         if authType == "Token"
             # Set user ID from auth token
             authHeader = request.headers["HTTP_AUTHORIZATION"]
@@ -92,7 +92,7 @@ class ApiSessionController < AnnotatorsController
         elsif authType == "ApiKey"
             # Set user ID from email address param
             user = User.find_or_create_by(email: params[:email])
-            logger.log user
+            logger.info user
             if user
                 @annotation.user_id = user.id
             end
