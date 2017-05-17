@@ -122,10 +122,10 @@
     <th>API Key</th>
   </tr>
 
-  <% ApiKey.find_each do |application_name, api_key| %>                    
+  <% ApiKey.find_each do |apikey| %>                    
     <tr>
-      <td><%= application_name  %></td>
-      <td><%= api_key           %></td>
+      <td><%= apikey.application_name  %></td>
+      <td><%= apikey.api_key           %></td>
     </tr>
   <% end %>
 </table>
