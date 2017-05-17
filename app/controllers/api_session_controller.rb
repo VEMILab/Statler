@@ -79,6 +79,7 @@ class ApiSessionController < AnnotatorsController
 
         # Get user ID from auth header
         authType = get_auth_type
+        logger.log authType
         if authType == "Token"
             # Set user ID from auth token
             authHeader = request.headers["HTTP_AUTHORIZATION"]
