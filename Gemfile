@@ -7,6 +7,12 @@ gem 'annotator_store'
 
 gem 'elasticsearch'
 
+# It wants Devise for some reason, even though it is not required in application.rb. Cannot create new model without adding it?
+gem 'devise'
+
+#also Doorkeeper
+gem 'doorkeeper'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.6'
 # Use sqlite3 as the database for Active Record
