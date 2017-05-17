@@ -98,7 +98,7 @@ class ApiSessionController < AnnotatorsController
                 @annotation.user_id = user.id
             else
                 # Make a new user and point the annotation to that
-                user = User.new(:name => params[:email], :email => params[:email], :pass => "pass")
+                user = User.new(:name => params[:email], :email => params[:email], :password => "pass", :password_confirmation => "pass")
                 user.save
                 @annotation.user_id = user.id
             end
