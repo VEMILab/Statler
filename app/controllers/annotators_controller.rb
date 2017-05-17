@@ -27,18 +27,7 @@ class AnnotatorsController < ApplicationController
 	
 	#include AnnotatorsHelper
 
-	private
-		def token_auth
-			logger.info "Authenticating..."
-			authenticate_or_request_with_http_token do |token, options|
-				User.find_by(token: token)
-			end
-		end
-
-		def invalid_username
-			render json: { errors: [ { detail:"Username does not exist." }]}, status: 401
-		end
-
+	# Authenticate using user/password info. Only used for initial token request
 	def user_auth
 		logger.info "Authenticating..."
 		authenticate_or_request_with_http_basic do |username, password|
@@ -49,12 +38,47 @@ class AnnotatorsController < ApplicationController
 		end
 	end
 
-	def session_user
-		@_session_user ||= token_auth
+	def write_auth
+		authHeader = get_auth_type
+		if type == "Token"
+			return token_auth
+		elsif type == "ApiKey"
+			return api_key_auth
+		end
+		return false
 	end
 
+	# Authenticate using token.
+	def token_auth
+		logger.info "Authenticating..."
+		authenticate_or_request_with_http_token do |token, options|
+			User.find_by(token: token)
+		end
+	end
+
+	def api_key_auth
+		authHeader = request.headers["HTTP_AUTHORIZATION"]
+		key = authHeader.split(" ").last
+		
+		ApiKey.find_by(api_key: key)
+	end
+
+	def get_auth_type
+		authHeader = request.headers["HTTP_AUTHORIZATION"]
+		type = authHeader.split(" ").first
+		return type
+	end
+
+	def invalid_username
+		render json: { errors: [ { detail: "Username does not exist." }]}, status: 401
+	end
+
+	# def session_user
+	# 	@_session_user ||= token_auth
+	# end
+
 	def require_login!
-		return true if token_auth
+		return true if write_auth
 		render json: { errors: [ { detail: "Access denied" } ] }, status: 401
 	end
 
