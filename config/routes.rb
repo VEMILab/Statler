@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   delete 'api/deleteAnnotation' => 'api_session#deleteAnnotation'
   post   'api/login' => 'api_session#login'
   delete 'api/logout' => 'api_session#logout'
+  post    'api/generateKey' => 'api_session#generateKey'
 
   # Configures store endpoint in your app
   mount AnnotatorStore::Engine, at: '/annotator_store'

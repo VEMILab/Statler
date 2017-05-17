@@ -226,6 +226,18 @@ class ApiSessionController < AnnotatorsController
     end
     
 
+    def generateKey
+        application_name = params[:application_name]
+
+        apikey = ApiKey.new  # Create
+        apikey.application_name = application_name
+        apikey.api_key = SecureRandom.uuid
+        apikey.save  # Finalize and save
+
+        render :json => apikey
+
+    end
+
 
 
 

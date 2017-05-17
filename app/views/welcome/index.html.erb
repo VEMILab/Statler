@@ -95,7 +95,7 @@
 <p>
 <h2 style="color:green; font-family:courier;">Here are the annotations that you have previously submitted:</h2>
 <h3 style="color:yellow; font-family:courier;">
-<%user_content_helper %>
+<% user_content_helper %>
 <% count = 0 %>
 <% if @returns == ["You need to be logged in to see annotations that you have submitted."] %>
 	<%== @returns[0] %>
@@ -110,6 +110,25 @@
 		<% count += 1 %>
 	<% end %>
 <% end %>
-</h3>
+
+<%= form_tag("/api/generateKey", method: "post") do %>
+  <label>Application Name:</label> <%= text_field_tag(:application_name) %><br>
+  <%= submit_tag("Create API Key") %>
+<% end %>
+
+<table>
+  <tr>
+    <th>Application Name</th>
+    <th>API Key</th>
+  </tr>
+
+  <% ApiKey.find_each do |application_name, api_key| %>                    
+    <tr>
+      <td><%= application_name  %></td>
+      <td><%= api_key           %></td>
+    </tr>
+  <% end %>
+</table>
+
 </body>
 
