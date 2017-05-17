@@ -1,100 +1,44 @@
-<body style="margin-left: 40px; background-color: black">
-<h1 style="color:green; font-family:courier; ">Statler Test Server</h1>
-<p><p>
-<h2 style="color:green; font-family:courier; ">
-<!--<%= welcome_helper %></h2>-->
+<body>
+<h1>Statler Test Server</h1>
 
-<!--
-<div class="form">
-<border-style:solid>
-<border-size:2px> 
-<border-color:red>
-<align:left>
-<font-color: #B98000>
+<% stylesheet_link_tag "style" %>
 
-<%= form_tag("/login", :method => "get", id: "login-form") do %>
-  <%= text_field_tag :username, params[:username], placeholder: "Username" %>
-
-  <%= submit_tag "Log In" %>
-<% end %>
-</div>
-<br>
-<p>
-<div class="form">
-<border-style:solid>
-<border-size:2px> 
-<border-color:red>
-<align:left>
-<font-color: #B98000>
-<b>New User?</b>
-<%= form_tag("/user", :method => "get", id: "user") do %>
-  <%= text_field_tag :username, params[:username], placeholder: "Username" %>
-  <%= text_field_tag :email, params[:email], placeholder: "Email" %>
-  <%= password_field_tag :password, params[:pass], placeholder: "Password" %>
-  <%= submit_tag "Create" %>
-<% end %>
-</div>
--->
-<p>
-<p>
-<p>
-
-<style type="text/css">
-  label {
-    display: inline-block;
-    float: left;
-    width: 150px;
-    color: orange;
-  }
-  input {
-    margin-bottom: 5px;
-  }
-</style>
-
-<h3 style="color:yellow; font-family:courier;">> Create new annotation:</h3>
+<h3>> Create new annotation:</h3>
 <%= form_tag("/annotation", method: "post") do %>
-  <label>Annotation:</label>      <%= text_field_tag(:annotation) %><br>
-  <label>Video Title:</label>     <%= text_field_tag(:video_title) %><br>
-  <label>Video Author:</label>    <%= text_field_tag(:video_author) %><br>	
-  <label>Video Location:</label>  <%= text_field_tag(:location) %><br>
-  <label>Semantic Tag:</label>    <%= text_field_tag(:semantic_tag) %><br>
+  <label>Annotation:</label>      <%= text_field_tag(:annotation) %><br />
+  <label>Video Title:</label>     <%= text_field_tag(:video_title) %><br />
+  <label>Video Author:</label>    <%= text_field_tag(:video_author) %><br />
+  <label>Video Location:</label>  <%= text_field_tag(:location) %><br />
+  <label>Semantic Tag:</label>    <%= text_field_tag(:semantic_tag) %><br />
   <%= submit_tag("Submit") %>
 <% end %>
-<p><p>
-<h3 style="color:yellow; font-family:courier;">> Search by annotation:</h3>
-<p>
-<div class="form">
-<border-style:solid>
-<border-size:2px> 
-<border-color:red>
-<align:left>
-<font-color: #B98000>
 
-<%= form_tag("/search", :method => "get", id: "search-form") do %>
-  <%= text_field_tag :search, params[:search], placeholder: "Search Annotations:" %>
-  <%= submit_tag "Search" %>
-<% end %>
+<br />
+<br />
+
+<h3>> Search by annotation:</h3>
+<br />
+<div class="form">
+
+  <%= form_tag("/search", :method => "get", id: "search-form") do %>
+    <%= text_field_tag :search, params[:search], placeholder: "Search Annotations:" %>
+    <%= submit_tag "Search" %>
+  <% end %>
 </div>
 
-<h3 style="color:yellow; font-family:courier;">> Search by tag:</h3>
-<p>
+<h3>> Search by tag:</h3>
+<br />
 <div class="form">
-<border-style:solid>
-<border-size:2px> 
-<border-color:red>
-<align:left>
-<font-color: #B98000>
-
-<%= form_tag("/searchtag", :method => "get", id: "search-form") do %>
-  <%= text_field_tag :searchtag, params[:searchtag], placeholder: "Search Semantic Tags:" %>
-  <%= submit_tag "Search" %>
-<% end %>
-
+  <%= form_tag("/searchtag", :method => "get", id: "search-form") do %>
+    <%= text_field_tag :searchtag, params[:searchtag], placeholder: "Search Semantic Tags:" %>
+    <%= submit_tag "Search" %>
+  <% end %>
 </div>
-<p>
-<p>
-<h2 style="color:green; font-family:courier;">Here are the annotations that you have previously submitted:</h2>
-<h3 style="color:yellow; font-family:courier;">
+
+<br />
+<br />
+
+<h2>Here are the annotations that you have previously submitted:</h2>
 <% user_content_helper %>
 <% count = 0 %>
 <% if @returns == ["You need to be logged in to see annotations that you have submitted."] %>
