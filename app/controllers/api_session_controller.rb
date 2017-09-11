@@ -104,10 +104,12 @@ class ApiSessionController < AnnotatorsController
         # Add polygon selector (spatial)
 
         # Add temporal selector
+        beginTime = annotation[:data][:beginTime]
+        endTime = annotation[:data][:endTime]
         target_selectors.push({
             type: "FragmentSelector",
             conformsTo: "http://www.w3.org/TR/media-frags/",
-            value: "t=#{annotation[:data][:beginTime] / 1000},#{annotation[:data][:endTime] / 1000}" 
+            value: "t=#{beginTime},#{endTime}"
         })
 
         target[:selector] = target_selectors
