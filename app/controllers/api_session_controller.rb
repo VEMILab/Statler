@@ -92,6 +92,27 @@ class ApiSessionController < AnnotatorsController
         end
         
         oa[:body] = body
+
+
+        target = {
+            id: annotation[:meta][:location],
+            type: "Video"
+        }
+
+        target_selectors = []
+
+        # Add polygon selector (spatial)
+
+        # Add temporal selector
+        target_selectors.push({
+            type: "FragmentSelector",
+            conformsTo: "http://www.w3.org/TR/media-frags/",
+            value: "t=#{annotation[:data][:beginTime] / 1000},#{annotation[:data][:endTime] / 1000}" 
+        })
+
+        target[:selector] = target_selectors
+
+        oa[:target] = target
         return oa
     end
 
