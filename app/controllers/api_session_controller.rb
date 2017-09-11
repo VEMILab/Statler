@@ -104,22 +104,24 @@ class ApiSessionController < AnnotatorsController
 
         # Add polygon selector (spatial)
         points = annotation[:data][:pointsArray]
-        logger.info points.inspect
-        logger.info points.class
-        points_array = YAML.load(points)
-        logger.info points_array.inspect
-        logger.info points_array.class
+        unless points.nil?
+            logger.info points.inspect
+            logger.info points.class
+            points_array = YAML.load(points)
+            logger.info points_array.inspect
+            logger.info points_array.class
 
-        points_mapped = []
-        points_array.each do |item|
-        # for item in points
-            points_mapped.append(item.map(&:to_f))
+            points_mapped = []
+            points_array.each do |item|
+            # for item in points
+                points_mapped.append(item.map(&:to_f))
+            end
+            svgHTML = "<svg:svg viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='#{points_mapped}' /></svg:svg>"
+            target_selectors.push({
+                type: "svgSelector",
+                value: svgHTML
+            })
         end
-        svgHTML = "<svg:svg viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='#{points_mapped}' /></svg:svg>"
-        target_selectors.push({
-            type: "svgSelector",
-            value: svgHTML
-        })
 
         # Add temporal selector
         beginTimeSeconds = annotation[:data][:beginTime].to_i / 1000
