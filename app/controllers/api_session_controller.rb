@@ -95,7 +95,7 @@ class ApiSessionController < AnnotatorsController
 
 
         target = {
-            id: annotation[:meta][:location],
+            id: annotation[:metadata][:location],
             type: "Video"
         }
 
