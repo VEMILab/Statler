@@ -76,14 +76,14 @@ class ApiSessionController < AnnotatorsController
         # Create text descriptor
         body.push({
             type: "TextualBody",
-            value: annotation.data.text,
+            value: annotation[:data][:text],
             format: "text/plain",
             language: "en",
             purpose: "describing"
         })
 
         # Add tag descriptors
-        for tag in annotation.data.tags
+        for tag in annotation[:data][:tags]
             body.push({
                 type: "TextualBody",
                 purpose: "tagging",
