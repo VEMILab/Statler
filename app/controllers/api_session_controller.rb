@@ -102,7 +102,7 @@ class ApiSessionController < AnnotatorsController
         target_selectors = []
 
         # Add polygon selector (spatial)
-        svgHTML = "<svg:svg viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='" + annotation[:data][:pointsArray].join(" ") + "' /></svg:svg>"
+        svgHTML = "<svg:svg viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='" + annotation[:data][:pointsArray] + "' /></svg:svg>"
         target_selectors.push({
             type: "svgSelector",
             value: svgHTML
