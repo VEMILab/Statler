@@ -29,30 +29,84 @@ class ApiSessionController < AnnotatorsController
                         video = Video.select("title", "location_ID").where(:ID => x.video_id)
                         location = Location.select("location").where(:ID => x.location_id)
                         user = User.select("name", "email").where(:ID => x.user_id)	
-                        anno = {}
+                        # anno = {}
 
-                        data = {}
-                        data[:text] = x.annotation
-                        data[:beginTime] = x.beginTime
-                        data[:endTime] = x.endTime
-                        data[:pointsArray] = x.pointsArray
-                        data[:tags] = tag_strings
+                        # data = {}
+                        # data[:text] = x.annotation
+                        # data[:beginTime] = x.beginTime
+                        # data[:endTime] = x.endTime
+                        # data[:pointsArray] = x.pointsArray
+                        # data[:tags] = tag_strings
 
-                        meta = {}
-                        meta[:id] = x.id
-                        meta[:title] = video[0].title
-                        meta[:location] = location[0].location
-                        unless user[0].nil?
-                            meta[:userName] = user[0].name
-                            meta[:userEmail] = user[0].email
+                        # meta = {}
+                        # meta[:id] = x.id
+                        # meta[:title] = video[0].title
+                        # meta[:location] = location[0].location
+                        # unless user[0].nil?
+                        #     meta[:userName] = user[0].name
+                        #     meta[:userEmail] = user[0].email
+                        # end
+
+                        # anno[:data] = data
+                        # anno[:metadata] = meta
+
+                        # # Form open annotation from constructed annotation
+                        # open_annotation = as_open_annotation(anno)
+                        # @annos.push(open_annotation)
+
+
+                        oa = {}
+                        oa[:@context] = "http://www.w3.org/ns/anno.jsonld"
+                        oa[:type] = "Annotation"
+                        oa[:motivation] = "highlighting"
+                
+                        body = []
+                        # Create text descriptor
+                        body.push({
+                            type: "TextualBody",
+                            value: x.annotation,
+                            format: "text/plain",
+                            language: "en",
+                            purpose: "describing"
+                        })
+                
+                        # Add tag descriptors
+                        for tag in tag_strings
+                            body.push({
+                                type: "TextualBody",
+                                purpose: "tagging",
+                                value: tag
+                            })
                         end
+                        
+                        oa[:body] = body
+                
+                
+                        target = {
+                            id: location[0].location,
+                            type: "Video"
+                        }
+                
+                        target_selectors = []
+                
+                        # Add polygon selector (spatial)
+                
+                        # Add temporal selector
+                        beginTimeSeconds = x.beginTime / 1000
+                        endTimeSeconds = x.endTime / 1000
+                        target_selectors.push({
+                            type: "FragmentSelector",
+                            conformsTo: "http://www.w3.org/TR/media-frags/",
+                            value: "t=#{beginTimeSeconds},#{endTimeSeconds}"
+                        })
+                
+                        target[:selector] = target_selectors
+                
+                        oa[:target] = target
+                        #return oa
+                        @annos.push(oa)
 
-                        anno[:data] = data
-                        anno[:metadata] = meta
 
-                        # Form open annotation from constructed annotation
-                        open_annotation = as_open_annotation(anno)
-                        @annos.push(open_annotation)
                         
                         #@annos.push(anno)
             
