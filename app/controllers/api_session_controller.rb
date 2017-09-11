@@ -105,11 +105,11 @@ class ApiSessionController < AnnotatorsController
         points = annotation[:data][:pointsArray]
         logger.info points.inspect
         logger.info points.class
-        points_raw = JSON.parse(points)
-        logger.info points.inspect
-        logger.info points.class
+        points.gsub!(/(\,)(\S)/, "\\1 \\2")
+        points_array = YAML::load(points)
+
         points_mapped = []
-        points['data']['children'].each do |item|
+        points_array.each do |item|
         # for item in points
             points_mapped.append(item.map(&:to_f))
         end
