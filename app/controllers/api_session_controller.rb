@@ -74,10 +74,13 @@ class ApiSessionController < AnnotatorsController
         oa[:motivation] = "highlighting"
 
         if annotation[:metadata][:userName] && annotation[:metadata][:userEmail]
+            username = annotation[:metadata][:userName]
+            email = annotation[:metadata][:userEmail]
             oa[:creator] = {
                 type: "Person",
-                nickname: annotation[:metadata][:userName],
-                email: Digest::SHA1.hexdigest annotation[:metadata][:userEmail] # SHA1 email address
+                nickname: username,
+                # SHA1 email address
+                email: Digest::SHA1.hexdigest email
             }
         end
 
