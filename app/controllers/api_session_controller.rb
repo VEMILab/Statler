@@ -105,11 +105,7 @@ class ApiSessionController < AnnotatorsController
         # Add polygon selector (spatial)
         points = annotation[:data][:pointsArray]
         unless points.nil?
-            logger.info points.inspect
-            logger.info points.class
-            points_array = YAML.load(points)
-            logger.info points_array.inspect
-            logger.info points_array.class
+            points_array = JSON.parse(points)
 
             points_mapped = []
             points_array.each do |item|
