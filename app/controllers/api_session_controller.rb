@@ -103,6 +103,7 @@ class ApiSessionController < AnnotatorsController
 
         # Add polygon selector (spatial)
         points = annotation[:data][:pointsArray]
+        puts points.inspect
         points_mapped = []
         for item in points
             points_mapped.append(item.map(&:to_f))
