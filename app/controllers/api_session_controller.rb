@@ -105,7 +105,7 @@ class ApiSessionController < AnnotatorsController
         points = annotation[:data][:pointsArray]
         logger.info points.inspect
         logger.info points.class
-        # points = JSON.parse(points)
+        points_raw = JSON.parse(points)
         logger.info points.inspect
         points_mapped = []
         for item in points
