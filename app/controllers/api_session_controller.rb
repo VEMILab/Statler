@@ -52,7 +52,7 @@ class ApiSessionController < AnnotatorsController
 
                         # Form open annotation from constructed annotation
                         open_annotation = as_open_annotation(anno)
-                        annos.push(open_annotation)
+                        @annos.push(open_annotation)
                         
                         #@annos.push(anno)
             
