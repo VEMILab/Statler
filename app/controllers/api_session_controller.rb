@@ -75,11 +75,11 @@ class ApiSessionController < AnnotatorsController
 
         if annotation[:metadata][:userName] && annotation[:metadata][:userEmail]
             username = annotation[:metadata][:userName]
+            # SHA1 email address
             email = Digest::SHA1.hexdigest annotation[:metadata][:userEmail]
             oa[:creator] = {
                 type: "Person",
                 nickname: username,
-                # SHA1 email address
                 email: email
             }
         end
