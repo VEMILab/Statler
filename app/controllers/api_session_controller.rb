@@ -1,5 +1,5 @@
 require "json"
-require "yaml"
+require 'digest/sha1'
 
 class ApiSessionController < AnnotatorsController
 
@@ -73,6 +73,14 @@ class ApiSessionController < AnnotatorsController
         oa[:type] = "Annotation"
         oa[:motivation] = "highlighting"
 
+        if annotation[:metadata][:userName] && annotation[:metadata][:userEmail]
+            oa[:creator] = {
+                type: "Person",
+                nickname: annotation[:metadata][:userName],
+                email: Digest::SHA1.hexdigest annotation[:metadata][:userEmail] # SHA1 email address
+            }
+        end
+
         body = []
         # Create text descriptor
         body.push({
@@ -105,15 +113,17 @@ class ApiSessionController < AnnotatorsController
         # Add polygon selector (spatial)
         points = annotation[:data][:pointsArray]
         unless points.nil?
+            # Get 2D array from string
             points_array = JSON.parse(points)
 
-            points_mapped = ""
-            points_array.each do |item|
-            # for item in points
+            points_string = ""
+            for item in points_array
+                # Convert from coordinate point string pairs to float pairs
                 raw_point = item.map(&:to_f)
-                points_mapped += "#{raw_point[0]},#{raw_point[1]} "
+                # Add to the points string
+                points_string += "#{raw_point[0]},#{raw_point[1]} "
             end
-            svgHTML = "<svg:svg viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='#{points_mapped}' /></svg:svg>"
+            svgHTML = "<svg:svg viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='#{points_string}' /></svg:svg>"
             target_selectors.push({
                 type: "svgSelector",
                 value: svgHTML
