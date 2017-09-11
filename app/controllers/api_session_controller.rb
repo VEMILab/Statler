@@ -91,7 +91,7 @@ class ApiSessionController < AnnotatorsController
             })
         end
         
-        oa.push(body)
+        oa[:body] = body
         return oa
     end
 
