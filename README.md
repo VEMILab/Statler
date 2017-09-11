@@ -30,24 +30,16 @@ Replace `YOUR_ADDRESS_HERE` with the public IP or DNS of the server. Leave off t
 
 After this, you should be ready to go.
 
-### Usage
+### EC2 Setup
+To install on a brand new Amazon EC2 Ubuntu 16.04 LTS instance, run the following in the terminal:
 
-To start the server, run
-```
-bash ./server.sh start
-```
+```sh
+sudo apt-get update
 
-To stop it, use `bash ./server.sh stop`.
+# Install RVM
+\curl -sSL https://get.rvm.io | bash
+source /home/ubuntu/.rvm/scripts/rvm
 
-The output from the latest session will be stored in `/server_log.txt`.
-
-## Using the Server
-
-API information is forthcoming.
-
-## EC2 Setup
-To install on a brand new Amazon EC2 Ubuntu 16.04 LTS instance, do the following:
-```
 # Install dependencies
 rvm install 2.3.1
 rvm --default use 2.3.1
@@ -61,12 +53,32 @@ bundle install
 # Do first-time setup
 chmod +x ./server.sh
 ./server.sh setup
+```
 
-# Set up the dev.properties file!
+A file called `dev.properties` will be created in the Statler folder. Put your server's address in the field marked `YOUR_ADDRESS_HERE` (this address is the one labelled "Public DNS (IPv4)" in your EC2 console).
 
+Finally, start the server:
+```sh
 # Start the server in the background (optional)
 ./server.sh start
 ```
+
+The server should be up and running at this point.
+
+### Usage
+
+To start the server, run
+```
+bash ./server.sh start
+```
+
+To stop it, use `bash ./server.sh stop`.
+
+The output from the latest session will be stored in `/server_log.txt`.
+
+## API
+
+See [API.md](/api.md) for information.
 
 ## Authors
 
