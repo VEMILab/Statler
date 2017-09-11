@@ -49,7 +49,12 @@ class ApiSessionController < AnnotatorsController
 
                         anno[:data] = data
                         anno[:metadata] = meta
-                        @annos.push(anno)
+
+                        # Form open annotation from constructed annotation
+                        open_annotation = as_open_annotation(anno)
+                        annos.push(open_annotation)
+                        
+                        #@annos.push(anno)
             
                     end #end for x
                 end #end for v
@@ -60,6 +65,35 @@ class ApiSessionController < AnnotatorsController
             render :json => @annohash
         end #end if @location
     end #end def getAnnotationsByLocation
+
+    def as_open_annotation(annotation)
+        oa = {}
+        oa[:@context] = "http://www.w3.org/ns/anno.jsonld"
+        oa[:type] = "Annotation"
+        oa[:motivation] = "highlighting"
+
+        body = []
+        # Create text descriptor
+        body.push({
+            type: "TextualBody",
+            value: annotation.data.text,
+            format: "text/plain",
+            language: "en",
+            purpose: "describing"
+        })
+
+        # Add tag descriptors
+        for tag in annotation.data.tags
+            body.push({
+                type: "TextualBody",
+                purpose: "tagging",
+                value: tag
+            })
+        end
+        
+        oa.push(body)
+        return oa
+    end
 
 
     ############ ADD ANNOTATION BY VIDEO LOCATION ############
