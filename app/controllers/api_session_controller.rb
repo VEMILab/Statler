@@ -80,7 +80,7 @@ class ApiSessionController < AnnotatorsController
                 type: "Person",
                 nickname: username,
                 # SHA1 email address
-                email:
+                email: email
             }
         end
 
