@@ -102,7 +102,7 @@ class ApiSessionController < AnnotatorsController
         target_selectors = []
 
         # Add polygon selector (spatial)
-        points = JSON.parase(annotation[:data][:pointsArray])
+        points = JSON.parse(annotation[:data][:pointsArray])
         logger.info points.inspect
         points_mapped = []
         for item in points
