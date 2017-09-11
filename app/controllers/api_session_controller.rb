@@ -107,10 +107,11 @@ class ApiSessionController < AnnotatorsController
         unless points.nil?
             points_array = JSON.parse(points)
 
-            points_mapped = []
+            points_mapped = ""
             points_array.each do |item|
             # for item in points
-                points_mapped.append(item.map(&:to_f))
+                raw_point = item.map(&:to_f)
+                points_mapped += "#{raw_point[0]},#{raw_point[1]} "
             end
             svgHTML = "<svg:svg viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='#{points_mapped}' /></svg:svg>"
             target_selectors.push({
