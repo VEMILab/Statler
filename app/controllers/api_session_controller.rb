@@ -134,8 +134,8 @@ class ApiSessionController < AnnotatorsController
         end
 
         # Add temporal selector
-        beginTimeSeconds = annotation[:data][:beginTime].to_i / 1000
-        endTimeSeconds = annotation[:data][:endTime].to_i / 1000
+        beginTimeSeconds = annotation[:data][:beginTime].to_f / 1000.0
+        endTimeSeconds = annotation[:data][:endTime].to_f / 1000.0
         target_selectors.push({
             type: "FragmentSelector",
             conformsTo: "http://www.w3.org/TR/media-frags/",
