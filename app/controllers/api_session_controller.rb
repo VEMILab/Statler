@@ -1,4 +1,5 @@
 require "json"
+require "yaml"
 
 class ApiSessionController < AnnotatorsController
 
@@ -105,8 +106,9 @@ class ApiSessionController < AnnotatorsController
         points = annotation[:data][:pointsArray]
         logger.info points.inspect
         logger.info points.class
-        points.gsub!(/(\,)(\S)/, "\\1 \\2")
-        points_array = YAML::load(points)
+        points_array = YAML.load(points)
+        logger.info points_array.inspect
+        logger.info points_array.class
 
         points_mapped = []
         points_array.each do |item|
