@@ -109,7 +109,8 @@ class ApiSessionController < AnnotatorsController
         logger.info points.inspect
         logger.info points.class
         points_mapped = []
-        for item in points
+        points['data']['children'].each do |item|
+        # for item in points
             points_mapped.append(item.map(&:to_f))
         end
         svgHTML = "<svg:svg viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='#{points_mapped}' /></svg:svg>"
