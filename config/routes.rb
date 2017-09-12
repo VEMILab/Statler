@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   #  get 'login/' => 'welcome#index'
   #get 'user/' => 'users#new'
   #get 'annotators/bork' => 'annotators#bork'
+  get    'api/annotation/:id', to: 'api_session#getAnnotationByID'
   get    'api/getAnnotationsByLocation' => 'api_session#getAnnotationsByLocation'
   post   'api/addAnnotation' => 'api_session#addAnnotation'
   post   'api/editAnnotation' => 'api_session#editAnnotation'

@@ -4,7 +4,15 @@ require 'digest/sha1'
 class ApiSessionController < AnnotatorsController
 
     before_action :user_auth, only: [:login]
-	before_action :require_login!, only: [:logout, :addAnnotation, :deleteAnnotation, :editAnnotation]
+    before_action :require_login!, only: [:logout, :addAnnotation, :deleteAnnotation, :editAnnotation]
+    
+
+    def getAnnotationByID
+        search_term = params[:id]
+        annotation = Annotation.find(params[:id])
+
+        render :json => annotation.asOpenAnnotationJSON()
+    end
 
     ############ SEARCH ANNOTATION BY LOCATION ############
 
@@ -24,36 +32,7 @@ class ApiSessionController < AnnotatorsController
                             next
                         end
 
-                        tag_strings = x.semantic_tags.collect(&:tag)
-
-                        #@annos.push(getAnnotationInfo(x)) <-- originally started pulling functionality into private function, added complexity seemed to outweigh readability
-                        video = Video.select("title", "location_ID").where(:ID => x.video_id)
-                        location = Location.select("location").where(:ID => x.location_id)
-                        user = User.select("name", "email").where(:ID => x.user_id)	
-                        anno = {}
-
-                        data = {}
-                        data[:text] = x.annotation
-                        data[:beginTime] = x.beginTime
-                        data[:endTime] = x.endTime
-                        data[:pointsArray] = x.pointsArray
-                        data[:tags] = tag_strings
-
-                        meta = {}
-                        meta[:id] = x.id
-                        meta[:title] = video[0].title
-                        meta[:location] = location[0].location
-                        unless user[0].nil?
-                            meta[:userName] = user[0].name
-                            meta[:userEmail] = user[0].email
-                        end
-
-                        anno[:data] = data
-                        anno[:metadata] = meta
-
-                        # Form open annotation from constructed annotation
-                        open_annotation = as_open_annotation(anno)
-                        @annos.push(open_annotation)
+                        @annos.push(x.asOpenAnnotationJSON())
                         
                         #@annos.push(anno)
             
