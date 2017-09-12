@@ -73,22 +73,24 @@ class Annotation < ActiveRecord::Base
 
         # Add spatial selector (polygon)
         # Get 2D array from string
-        points_array = JSON.parse(self.pointsArray)
+        if self.pointsArray
+            points_array = JSON.parse(self.pointsArray)
 
-        unless points_array.blank?
+            unless points_array.blank?
 
-            points_string = ""
-            for item in points_array
-                # Convert from coordinate point string pairs to float pairs
-                raw_point = item.map(&:to_f)
-                # Add to the points string
-                points_string += "#{raw_point[0]},#{raw_point[1]} "
+                points_string = ""
+                for item in points_array
+                    # Convert from coordinate point string pairs to float pairs
+                    raw_point = item.map(&:to_f)
+                    # Add to the points string
+                    points_string += "#{raw_point[0]},#{raw_point[1]} "
+                end
+                svgHTML = "<svg:svg viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='#{points_string}' /></svg:svg>"
+                target_selectors.push({
+                    type: "svgSelector",
+                    value: svgHTML
+                })
             end
-            svgHTML = "<svg:svg viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='#{points_string}' /></svg:svg>"
-            target_selectors.push({
-                type: "svgSelector",
-                value: svgHTML
-            })
         end
 
         # Add temporal selector
