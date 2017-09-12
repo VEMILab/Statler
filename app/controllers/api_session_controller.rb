@@ -67,9 +67,11 @@ class ApiSessionController < AnnotatorsController
         end #end if @location
     end #end def getAnnotationsByLocation
 
+    # Converts from our internal JSON format to the W3C Open Annotation model.
     def as_open_annotation(annotation)
         oa = {}
         oa[:@context] = "http://www.w3.org/ns/anno.jsonld"
+        oa[:id] = annotation[:metadata][:id]
         oa[:type] = "Annotation"
         oa[:motivation] = "highlighting"
 
@@ -146,6 +148,11 @@ class ApiSessionController < AnnotatorsController
 
         oa[:target] = target
         return oa
+    end
+
+    # Converts from an open annotation to our internal JSON format.
+    def from_open_annotation(annotation)
+
     end
 
 
