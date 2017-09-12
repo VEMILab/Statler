@@ -73,8 +73,8 @@ class Annotation < ActiveRecord::Base
 
         # Add spatial selector (polygon)
         points = self.pointsArray
-        log.info points
-        log.info points.inspect
+        logger.info points
+        logger.info points.inspect
         unless self.pointsArray.blank?
             # Get 2D array from string
             points_array = JSON.parse(points)
