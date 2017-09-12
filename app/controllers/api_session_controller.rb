@@ -40,9 +40,9 @@ class ApiSessionController < AnnotatorsController
                 end #end for v
             end #end if @videos
 
-            @annohash = {}
-            @annohash[:annotations] = @annos
-            render :json => @annohash
+            # @annohash = {}
+            # @annohash[:annotations] = @annos
+            render :json => @annos
         end #end if @location
     end #end def getAnnotationsByLocation
 
