@@ -12,19 +12,19 @@ class Annotation < ActiveRecord::Base
 
 	#this should be searching itself, with the search parameter submitted by the user	
 	def self.search(search)
-	  #query to identify annotations where the 'annotation' field contains a partial or complete string resembling the user query
+	    #query to identify annotations where the 'annotation' field contains a partial or complete string resembling the user query
 		where("annotation like \"%#{search}%\"")
 
 	end #end of search()
 
-	def asOpenAnnotationJSON()
+    def asOpenAnnotationJSON()
+        # Collect related info
 		video = Video.select("title", "location_ID").where(:ID => self.video_id)
 		location = Location.select("location").where(:ID => self.location_id)
 		user = User.select("name", "email").where(:ID => self.user_id)	
-
 		tag_strings = self.semantic_tags.collect(&:tag)
 
-
+        # Build hash from this annotation object
 		oa = {}
         oa[:@context] = "http://www.w3.org/ns/anno.jsonld"
         oa[:id] = self.id
@@ -71,7 +71,7 @@ class Annotation < ActiveRecord::Base
 
         target_selectors = []
 
-        # Add polygon selector (spatial)
+        # Add spatial selector (polygon)
         points = self.pointsArray
         unless points.nil?
             # Get 2D array from string
