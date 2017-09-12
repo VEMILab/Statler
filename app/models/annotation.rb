@@ -31,7 +31,7 @@ class Annotation < ActiveRecord::Base
         oa[:type] = "Annotation"
         oa[:motivation] = "highlighting"
 
-        unless self.user[0].nil?
+        unless user[0].nil?
             username = user[0].name
             # SHA1 email address
             email = Digest::SHA1.hexdigest user[0].email
