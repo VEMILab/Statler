@@ -87,7 +87,7 @@ class Annotation < ActiveRecord::Base
                 end
                 svgHTML = "<svg:svg viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='#{points_string}' /></svg:svg>"
                 target_selectors.push({
-                    type: "svgSelector",
+                    type: "SvgSelector",
                     value: svgHTML
                 })
             end
