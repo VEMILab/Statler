@@ -69,7 +69,7 @@ class ApiSessionController < AnnotatorsController
             @annotation.pointsArray = svgSelector.first[:value]
         end
 
-        timeSelector = params[:target].select { |item| item[:type] == "FragmentSelector" }
+        timeSelector = params[:target][:selector].select { |item| item[:type] == "FragmentSelector" }
         unless timeSelector.empty?
             timeStr = timeSelector.first[:value]
             timeStr.sub! "t=", ""
