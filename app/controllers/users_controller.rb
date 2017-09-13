@@ -15,9 +15,12 @@ class UsersController < ApplicationController
 
   def createFromForm
     # SHA1 the email and password
-    email = Digest::SHA1.hexdigest :email
-    pass = Digest::SHA1.hexdigest :password
-    pass_conf = Digest::SHA1.hexdigest :password_confirmation
+    email = Digest::SHA1.hexdigest :email.to_s
+    pass = Digest::SHA1.hexdigest :password.to_s
+    pass_conf = Digest::SHA1.hexdigest :password_confirmation.to_s
+
+    logger.info "Email: #{:email} => #{email}"
+    logger.info "Pass: #{:password} => #{pass}"
 
     create(:name => :name, :email => email, :password => pass, :password_confirmation => pass_conf)
   end
