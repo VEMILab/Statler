@@ -10,10 +10,11 @@
 <align:left>
 <font-color: #B98000>
 <display: block>
+
+<h3>Sign Up!</h3>
 <%= form_for :user, url: '/users' do |f| %>
-  <h3>Sign Up!</h3>
   Name: <%= f.text_field :name %><br>
-  Email: <%= f.text_field :email %><br>
+  Email: <%= (Digest::SHA1.hexdigest f.text_field) :email %><br>
   Password: <%= f.password_field :password %><br>
   Password Confirmation: <%= f.password_field :password_confirmation %><br>
   <%= f.submit "Submit" %>
