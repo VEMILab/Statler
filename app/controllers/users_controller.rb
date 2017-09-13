@@ -22,7 +22,13 @@ class UsersController < ApplicationController
     logger.info "Email: #{:email} => #{email}"
     logger.info "Pass: #{:password} => #{pass}"
 
-    create(:name => :name, :email => email, :password => pass, :password_confirmation => pass_conf)
+    user = User.new(:name => :name, :email => email, :password => pass, :password_confirmation => pass_conf)
+    if user.save
+      session[:user_id] = user.id
+      redirect_to '/'
+    else
+      redirect_to '/signup'
+    end
   end
 
 private
