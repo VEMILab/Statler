@@ -31,6 +31,7 @@ Rails.application.routes.draw do
 
   get '/signup' => 'users#new'
   post '/users' => 'users#create'
+  post '/signupForm' => 'users#createFromForm'
 
   # get '/annotation' => 'annotation#new'
   post '/annotation' => 'annotations#create'
