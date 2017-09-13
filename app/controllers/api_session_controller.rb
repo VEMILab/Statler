@@ -51,7 +51,7 @@ class ApiSessionController < AnnotatorsController
     # Add check if annotation text and time and shape match any extant annotations?
     def addAnnotation
 
-        par = JSON.parse par
+        par = JSON.parse params
         Logger.info par.inspect
         
         ### Create a new Annotation instance
