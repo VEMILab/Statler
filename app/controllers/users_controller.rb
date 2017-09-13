@@ -19,8 +19,8 @@ class UsersController < ApplicationController
     pass = Digest::SHA1.hexdigest :password.to_s
     pass_conf = Digest::SHA1.hexdigest :password_confirmation.to_s
 
-    logger.info "Email: #{:email} => #{email}"
-    logger.info "Pass: #{:password} => #{pass}"
+    logger.info "Email: #{:email.to_s} => #{email}"
+    logger.info "Pass: #{:password.to_s} => #{pass}"
 
     user = User.new(:name => :name, :email => email, :password => pass, :password_confirmation => pass_conf)
     if user.save
