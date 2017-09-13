@@ -78,7 +78,7 @@ class ApiSessionController < AnnotatorsController
             @annotation.endTime = pair.last.to_f * 1000 # Convert to ms
         else
             # Throw error: time fragment is required.
-            render json: { detail: "Time fragment is required." }, status: 400
+            render json: { detail: "Time fragment is required." }, status: 422
             return
         end
 
@@ -103,7 +103,7 @@ class ApiSessionController < AnnotatorsController
 
             if params[:creator].nil? || params[:creator][:email].nil?
                 # Throw an error. Email is required for API auth.
-                render json: { detail: "creator.email field is required for API requests!" }, status: 400
+                render json: { detail: "creator.email field is required for API requests!" }, status: 422
                 return
             end
 
@@ -212,7 +212,7 @@ class ApiSessionController < AnnotatorsController
         # TODO: Throw an error if the annotation ID is already deprecated
         annotation = Annotation.find(params[:id])
         if annotation.deprecated
-            render :json => { detail: "Annotation #{params[:id]} was modified. Please reload the page and try again." }, status: 500
+            render :json => { detail: "Annotation #{params[:id]} was modified. Please reload the page and try again." }, status: 409
             return
         end
     
