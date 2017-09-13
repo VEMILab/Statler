@@ -75,9 +75,10 @@ class ApiSessionController < AnnotatorsController
             timeStr.sub! "t=", ""
             pair = timeStr.split(",")
             @annotation.beginTime = pair.first.to_f * 1000 # Convert to ms
-            @annotation.endTime = pair.first.to_f * 1000 # Convert to ms
+            @annotation.endTime = pair.last.to_f * 1000 # Convert to ms
         else
             # Throw error: time fragment is required.
+            render json: { detail: "Time fragment is required." }, status: 400
         end
 
         #@annotation.tags = params[:tags]
