@@ -61,7 +61,7 @@ class ApiSessionController < AnnotatorsController
         end
 
         # Append target points if supplied
-        svgSelector = params[:target][:selector].select { |item| item[:type] == "SvgSelector"}
+        svgSelector = params[:target][:selector].select { |item| item[:type] == "SvgSelector" }
         unless svgSelector.empty?
             # Parse pointsarray from svgSelector[0][:value]
             #svgStr = svgSelector[0][:value]
@@ -79,6 +79,7 @@ class ApiSessionController < AnnotatorsController
         else
             # Throw error: time fragment is required.
             render json: { detail: "Time fragment is required." }, status: 400
+            return
         end
 
         #@annotation.tags = params[:tags]
@@ -101,7 +102,9 @@ class ApiSessionController < AnnotatorsController
         elsif authType == "ApiKey"
 
             if params[:creator].nil? || params[:creator][:email].nil?
-                # TODO: Throw an error. Email is required for API auth.
+                # Throw an error. Email is required for API auth.
+                render json: { detail: "creator.email field is required for API requests!" }, status: 400
+                return
             end
 
             # Set user ID from email address param
@@ -207,12 +210,18 @@ class ApiSessionController < AnnotatorsController
     def editAnnotation ## accepts annotation id
 
         # TODO: Throw an error if the annotation ID is already deprecated
+        annotation = Annotation.find(params[:id])
+        if annotation.deprecated
+            render :json => { detail: "Annotation #{params[:id]} was modified. Please reload the page and try again." }, status: 500
+            return
+        end
     
         # Deprecate the old annotation
         deleteAnnotation
         
         # Create a new annotation linking back to the old one.
         addAnnotation
+        
     end #end def editAnnotation
     
     ############ DELETE ANNOTATION ############
@@ -225,7 +234,7 @@ class ApiSessionController < AnnotatorsController
             anno.update(deprecated: true)
             # head :no_content
         else
-            render :json => { errors: [ { detail: "Could not find annotation id=#{search_term} to delete." } ] }, status: 404
+            render :json => { detail: "Could not find annotation id=#{search_term} to delete." }, status: 404
         end
 
     end
