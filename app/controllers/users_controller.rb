@@ -16,15 +16,13 @@ class UsersController < ApplicationController
   def createFromForm
     par = user_params
 
+    name = par[:name]
     # SHA1 the email and password
     email = Digest::SHA1.hexdigest par[:email].to_s
     pass = Digest::SHA1.hexdigest par[:password].to_s
     pass_conf = Digest::SHA1.hexdigest par[:password_confirmation].to_s
 
-    logger.info "Email: #{par[:email].to_s} => #{email}"
-    logger.info "Pass: #{par[:password].to_s} => #{pass}"
-
-    user = User.new(:name => :name, :email => email, :password => pass, :password_confirmation => pass_conf)
+    user = User.new(:name => name, :email => email, :password => pass, :password_confirmation => pass_conf)
     if user.save
       session[:user_id] = user.id
       redirect_to '/'

@@ -31,10 +31,9 @@ class Annotation < ActiveRecord::Base
         oa[:type] = "Annotation"
         oa[:motivation] = "highlighting"
 
-        unless user[0].nil?
-            username = user[0].name
-            # SHA1 email address
-            email = Digest::SHA1.hexdigest user[0].email
+        unless user.first.nil?
+            username = user.first.name
+            email = user.first.email # Digest::SHA1.hexdigest 
             oa[:creator] = {
                 type: "Person",
                 nickname: username,
@@ -65,7 +64,7 @@ class Annotation < ActiveRecord::Base
 
 
         target = {
-            id: location[0].location,
+            id: location.first.location,
             type: "Video"
         }
 
@@ -83,9 +82,9 @@ class Annotation < ActiveRecord::Base
                     # Convert from coordinate point string pairs to float pairs
                     raw_point = item.map(&:to_f)
                     # Add to the points string
-                    points_string += "#{raw_point[0]},#{raw_point[1]} "
+                    points_string += "#{raw_point.first},#{raw_point.last} "
                 end
-                svgHTML = "<svg:svg viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='#{points_string}' /></svg:svg>"
+                svgHTML = "<svg:svg viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='#{points_string.strip!}' /></svg:svg>"
                 target_selectors.push({
                     type: "SvgSelector",
                     value: svgHTML

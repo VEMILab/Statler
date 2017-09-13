@@ -54,16 +54,41 @@ class ApiSessionController < AnnotatorsController
         
         ### Create a new Annotation instance
         @annotation = Annotation.new
-        @annotation.annotation = params[:annotation]
-        @annotation.pointsArray = params[:pointsArray]
-        @annotation.beginTime = params[:beginTime]
-        @annotation.endTime = params[:endTime]
+
+        # Append body text if supplied
+        textSelector = params[:body].select { |item| item[:purpose] == "describing" }
+        unless textSelector.empty?
+            @annotation.annotation = textSelector.first[:value]
+        end
+
+        # Append target points if supplied
+        svgSelector = params[:target][:selector].select { |item| item[:type] == "SvgSelector"}
+        unless svgSelector.empty?
+            # Parse pointsarray from svgSelector[0][:value]
+            #svgStr = svgSelector[0][:value]
+            #points = svgSelector[/points='(.*?)'/m, 1].strip!.split(" ").map! { |item| item.split(",") }
+            @annotation.pointsArray = svgSelector.first[:value]
+        end
+
+        timeSelector = params[:target].select { |item| item[:type] == "FragmentSelector" }
+        unless timeSelector.empty?
+            timeStr = timeSelector.first[:value]
+            timeStr.sub! "t=", ""
+            pair = timeStr.split(",")
+            @annotation.beginTime = pair.first.to_f * 1000 # Convert to ms
+            @annotation.endTime = pair.first.to_f * 1000 # Convert to ms
+        else
+            # Throw error: time fragment is required.
+        end
+
         #@annotation.tags = params[:tags]
         @annotation.user_id = nil#session[:user_id]
 
         # Get user ID from auth header
         authType = get_auth_type
         logger.info authType
+
+        # If token auth, get user identity from token and add the information to the annotation
         if authType == "Token"
             # Set user ID from auth token
             authHeader = request.headers["HTTP_AUTHORIZATION"]
@@ -74,15 +99,23 @@ class ApiSessionController < AnnotatorsController
                 @annotation.user_id = user.id
             end
         elsif authType == "ApiKey"
-            # Set user ID from email address param
-            user = User.find_by(email: params[:email])
 
+            if params[:creator].nil? || params[:creator][:email].nil?
+                # TODO: Throw an error. Email is required for API auth.
+            end
+
+            # Set user ID from email address param
+            user = User.find_by(email: params[:creator][:email])
+
+            # If user info is specified in the request, pull the user from the db and add its info to the annotation.
             if user
                 # Point the annotation to the found user
                 @annotation.user_id = user.id
+            # Otherwise create a new user from the 
             else
-                # Make a new user and point the annotation to that
-                user = User.new(:name => params[:email], :email => params[:email], :password => "pass", :password_confirmation => "pass")
+                # Make a new user and point the annotation to that.
+                p = Digest::SHA1.hexdigest "default"                
+                user = User.new(:name => params[:creator][:email], :email => params[:creator][:email], :password => p, :password_confirmation => p)
                 user.save
                 @annotation.user_id = user.id
             end
@@ -90,7 +123,7 @@ class ApiSessionController < AnnotatorsController
 
         edit_mode = false
         if params[:id]  ## if an old annotation id is supplied, this is an edit and we should create a pointer to the old annotation
-                edit_mode = true
+            edit_mode = true
             @annotation.prev_anno_ID = params[:id]
         end
 
@@ -169,6 +202,8 @@ class ApiSessionController < AnnotatorsController
     ############ EDIT ANNOTATION ############
     
     def editAnnotation ## accepts annotation id
+
+        # TODO: Throw an error if the annotation ID is already deprecated
     
         # Deprecate the old annotation
         deleteAnnotation
