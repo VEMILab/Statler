@@ -130,7 +130,7 @@ class ApiSessionController < AnnotatorsController
         #logger.info params[:semantic_tag]
         
         # Find the Location entry for the URL
-        @location = Location.search(params[:location]).order("created_at DESC") ## pulls location IDs
+        @location = Location.search(params[:target][:id]).order("created_at DESC") ## pulls location IDs
         # Find the Video entries for the found Location
         @videos = Video.select("id", "title", "author", "location_ID").where(:location_ID => @location)
         #@videos = Video.search(params[:video_title]).order("created_at DESC")    
@@ -139,11 +139,11 @@ class ApiSessionController < AnnotatorsController
             ### If there is no Video associated with the Location, create a new one
             # Make and populate Video
             @video = Video.new
-            @video.title = params[:video_title]
-            @video.author = params[:video_author]
+            # @video.title = params[:video_title]
+            # @video.author = params[:video_author]
             # Make and populate Location
             @new_location = Location.new
-            @new_location.location = params[:location]
+            @new_location.location = params[:target][:id]
             @new_location.save
             @video.save
             @video.location_id = @new_location.id
@@ -163,8 +163,11 @@ class ApiSessionController < AnnotatorsController
 
         ### Handle tags
 
+        tagSelectors = params[:body].select { |item| item[:purpose] == "tagging" }
+        tags = tagSelectors.map! { |item| item[:value] }
+
         # Create SemanticTags for new tags
-        Array(params[:tags]).each do |tagStr|
+        tags.each do |tagStr|
             # Find or create the SemanticTag for the tag
             tag_entry = SemanticTag.find_or_create_by(tag: tagStr)
 
@@ -177,14 +180,14 @@ class ApiSessionController < AnnotatorsController
         end
 
         # Remove TagAnnotation relations that are not represented by the tag list (remove deleted tags from annotation).
-        if edit_mode && params[:tags]
+        if edit_mode && tags
             # Find the TagAnnotations attached to the annotation
             existing_tagannotations = TagAnnotation.where(semantic_tag_id: @annotation.id)
 
             # Any TagAnnotations that have SemanticTags that aren't in params[:tags] should be removed.
             Array(existing_tagannotations).each do |tag_annotation|
                 value = SemanticTag.find_by(id: tag_annotation.semantic_tag_id)
-                if !value.in?(params[:tags])
+                if !value.in?(tags)
                     # Remove the TagAnnotation from TagAnnotations
                     tag_annotation.destroy
                 end
