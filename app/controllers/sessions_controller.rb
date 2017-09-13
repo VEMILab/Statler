@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
 
   def create
     email = Digest::SHA1.hexdigest params[:email].to_s
-    pass = Digest::SHA1.hexdigest params[:password]
+    pass = Digest::SHA1.hexdigest params[:password].to_s
 
 	  user = User.find_by_email(email)
     # If the user exists AND the password entered is correct.
