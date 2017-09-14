@@ -1,21 +1,8 @@
 <body>
 <h1>Statler Test Server</h1>
 
-<% stylesheet_link_tag "application.css" %>
-
-<h3>> Create new annotation:</h3>
-<%= form_tag("/annotation", method: "post") do %>
-  <label>Annotation:</label>      <%= text_field_tag(:annotation) %><br />
-  <label>Video Title:</label>     <%= text_field_tag(:video_title) %><br />
-  <label>Video Author:</label>    <%= text_field_tag(:video_author) %><br />
-  <label>Video Location:</label>  <%= text_field_tag(:location) %><br />
-  <label>Semantic Tag:</label>    <%= text_field_tag(:semantic_tag) %><br />
-  <%= submit_tag("Submit") %>
-<% end %>
-
-<br />
-
-<h3>> Search by annotation:</h3>
+<!--
+<h3>> Search by annotation text:</h3>
 <div class="form">
   <%= form_tag("/search", :method => "get", id: "search-form") do %>
     <%= text_field_tag :search, params[:search], placeholder: "Search Annotations:" %>
@@ -32,11 +19,10 @@
     <%= submit_tag "Search" %>
   <% end %>
 </div>
+-->
 
 <!-- BEGIN SESSION GUARDED CONTENT -->
 <% if is_logged_in %>
-
-<br />
 
 <h3>> Your Annotations</h3>
 <% user_content_helper %>
@@ -56,6 +42,12 @@
 <% end %>
 
 <!-- END SESSION GUARDED CONTENT -->
+<% end %>
+
+
+<% if !is_logged_in %>
+<h3>> Your Annotations</h3>
+<p>Log in to see your submitted annotations.</p>
 <% end %>
 
 <br />
