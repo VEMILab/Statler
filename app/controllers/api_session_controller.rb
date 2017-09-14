@@ -9,7 +9,12 @@ class ApiSessionController < AnnotatorsController
 
     def getAnnotationByID
         search_term = params[:id]
-        annotation = Annotation.find(params[:id])
+        annotation = Annotation.find_by(id: params[:id])
+
+        if !annotation
+            render :json => { detail: "Could not find annotation id=#{search_term} to delete." }, status: 404
+            return
+        end
 
         render :json => annotation.asOpenAnnotationJSON()
     end
