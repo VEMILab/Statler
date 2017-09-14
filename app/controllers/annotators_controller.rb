@@ -70,7 +70,7 @@ class AnnotatorsController < ApplicationController
 	end
 
 	def invalid_username
-		render json: { errors: [ { detail: "Username does not exist." }]}, status: 401
+		render json: { detail: "Username does not exist." }, status: 401
 	end
 
 	# def session_user
@@ -79,7 +79,7 @@ class AnnotatorsController < ApplicationController
 
 	def require_login!
 		return true if write_auth
-		render json: { errors: [ { detail: "Access denied" } ] }, status: 401
+		render json: { detail: "Access denied" }, status: 401
 	end
 
 	#before_action :require_login!, only: [:login]
