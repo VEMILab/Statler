@@ -24,9 +24,9 @@ class ApiSessionController < AnnotatorsController
     def getAnnotationsByLocation
         search_term = params[:location]
         @location = Location.search(search_term).order("created_at DESC") ## pulls location IDs
+        @annos = []
         if @location.present?
             @videos = Video.select("id", "title", "author", "location_ID").where(:location_ID => @location)
-            @annos = []
 
             if @videos.present?
                 for v in @videos
@@ -47,8 +47,9 @@ class ApiSessionController < AnnotatorsController
 
             # @annohash = {}
             # @annohash[:annotations] = @annos
-            render :json => @annos
         end #end if @location
+
+        render :json => @annos
     end #end def getAnnotationsByLocation
 
     ############ ADD ANNOTATION BY VIDEO LOCATION ############
