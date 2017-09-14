@@ -74,12 +74,12 @@ div {
 }
 
 table {
-  border-color: white;
+  border: 1px solid white;
   border-collapse: collapse;
 
   th, td {
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
     text-align: left;
   }
 
