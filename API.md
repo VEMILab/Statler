@@ -19,18 +19,56 @@ Where `key` is the API key.
 
 
 ## Annotation JSON structure
-When an annotation is returned by the server, it will be in the following JSON structure:
+All annotations send to the server and retrieved from the server will be [W3C Web Annotation](https://www.w3.org/TR/annotation-model/) objects in JSON form. 
 
-- `data`
-    + `beginTime`: Start time in integer milliseconds
-    + `endTime`: Stop time in integer milliseconds
-    + `pointsArray`: Array of arrays representing a polygon as percent point coordinates in clockwise order. For example, a polygon covering the left half of the video might look like `[["0", "0"], ["50", "0"], ["50", "50"], ["0", "50"]]`
-    + `tags`: Array of strings representing video tags
-    + `text`: String representing annotation text
-- `metadata`
-    + `id`: ID of the annotation on the server
-    + `location`: URL location of the video source
-    + `title`: Title of the video
+A sample annotation is below. Note that we support *only* these fields as of now. All information will be discarded when ingested by the server except for where noted. When annotations are retrieved from the server, the discarded information is inferred to be there and re-added (and therefore will be uniform across all annotations).
+
+```json
+{
+    "@context": "http://www.w3.org/ns/anno.jsonld",
+    "id": 1, // Kept by server
+    "type": "Annotation",
+    "motivation": "highlighting",
+    "creator": {
+        "type": "Person",
+        "nickname": "test",
+        "email": "a6ad00ac113a19d953efb91820d8788e2263b28a" // Kept by server. SHA1 email address
+    },
+    "body": [
+        // Only one of these is permitted
+        {
+            "type": "TextualBody",
+            "value": "Round meerkat", // Kept by server
+            "format": "text/plain",
+            "language": "en",
+            "purpose": "describing"
+        },
+        // An arbitrary number of tags may be used by making more than one of this object
+        {
+            "type": "TextualBody",
+            "purpose": "tagging",
+            "value": "Actor" // Kept by server
+        }
+    ],
+    "target": {
+        "id": "http://sachinchoolur.github.io/lightGallery/static/videos/video2.mp4", // Kept by server
+        "type": "Video",
+        "selector": [
+            // Only one SvgSelector is allowed
+            {
+                "type": "SvgSelector",
+                "value": "<svg:svg viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='35,17.22222222222222 38.90625,12.222222222222221 42.34375,12.222222222222221 49.6875,33.61111111111111 50.625,48.61111111111111 46.40625,62.222222222222214 45.3125,70.55121527777779 34.375,69.16666666666667 32.65625,55.83333333333333 28.906249999999996,44.72222222222222 29.84375,32.77777777777778 33.90625,22.22222222222222' /></svg:svg>" // Kept by server
+            },
+            // Only one FragmentSelector is allowed
+            {
+                "type": "FragmentSelector",
+                "conformsTo": "http://www.w3.org/TR/media-frags/",
+                "value": "t=1.0,11.0" // Kept by server
+            }
+        ]
+    }
+}
+```
 
 ## Methods
 
@@ -39,7 +77,7 @@ When an annotation is returned by the server, it will be in the following JSON s
 
 Request type: `GET`
 
-Gets an array of annotations for the video at the given URL.
+Gets a JSON array of annotation objects for the video at the given URL.
 
 Input JSON:
 ```json
@@ -50,7 +88,7 @@ Input JSON:
 Where `url` is the video's source URL as a string.
 
 Output JSON:
-- `annotations`: An array of annotation objects
+- A JSON array of annotation objects
 
 
 ### `addAnnotation` (protected)
@@ -59,18 +97,12 @@ Output JSON:
 Request type: `POST`
 
 Input JSON:
-- `annotation`: Main text of the annotation
-- `video_title`: Title of the video (optional)
-- `video_author`: Author of the annotation (optional)
-- `location`: URL of the video
-- `beginTime`: Start time of the annotation in integer milliseconds
-- `endTime`: Stop time of the annotation in integer milliseconds
-- `pointsArray`: Array of arrays representing a polygon as percent point coordinates in clockwise order. For example, a polygon covering the left half of the video might look like `[["0", "0"], ["50", "0"], ["50", "50"], ["0", "50"]]`
-- `tags`: Array of strings representing tags for the video
-- `email`: (Required if using API key) Email address of annotation creator
+- A JSON object representing a W3C Web Annotation object.
 
 Output JSON:
 - `id`: The ID generated for the new annotation by the server
+
+Do not supply an ID with the input JSON, or it will be treated as an edit and the server will give you an error.
 
 
 ### `editAnnotation` (protected)
