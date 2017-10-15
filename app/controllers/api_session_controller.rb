@@ -185,7 +185,6 @@ class ApiSessionController < AnnotatorsController
             tag_annotation.semantic_tag_id = tag_entry.id
             tag_annotation.annotation_id = @annotation.id
             tag_annotation.save
-            
         end
 
         # Remove TagAnnotation relations that are not represented by the tag list (remove deleted tags from annotation).
@@ -209,6 +208,88 @@ class ApiSessionController < AnnotatorsController
         render :json => @ret
     end #end def addAnnotation
         
+    ############ FLAG TAG ############
+
+    def flagAnnotation # accepts annotation id
+    # Unlike a normal edit, this just appends a new tag to an existing annotaiton.
+    # Since this is a very different behavior we can't reuse most of the other functions here
+    # It requires a login, but does not require that the user adding a flag be the creator of the
+    # original annotation. It also adds packed metadata to the tag label; the front end is expected
+    # to unpack and render it appropriately.
+
+        # TODO: Throw an error if the annotation ID is already deprecated
+        @annotation = Annotation.find(params[:id])
+        if @annotation.deprecated
+            render :json => { detail: "Annotation #{params[:id]} was modified. Please reload the page and try again." }, status: 409
+            return
+        end
+
+        # user id will be the current user and must be included in the post data
+        # this is duplicated code from addAnnotation above, it should be pulled out later
+        # it is _not_ overwriting the user_id of the annotation creator
+        flag_user_id = nil#session[:user_id]
+        
+        # Get user ID from auth header
+        authType = get_auth_type
+        logger.info authType
+
+        # If token auth, get user identity from token and add the information to the annotation
+        if authType == "Token"
+            # Set user ID from auth token
+            authHeader = request.headers["HTTP_AUTHORIZATION"]
+            auth = authHeader.split(" ").last
+            pair = auth.split("=")
+            user = User.find_by(token: pair.last)
+            if user
+                flag_user_id = user.id
+            end
+        elsif authType == "ApiKey"
+            if params[:creator].nil? || params[:creator][:email].nil?
+                # Throw an error. Email is required for API auth.
+                render json: { detail: "creator.email field is required for API requests!" }, status: 422
+                return
+            end
+
+            # Set user ID from email address param
+            user = User.find_by(email: params[:creator][:email])
+
+            # If user info is specified in the request, pull the user from the db and add its info to the annotation.
+            if user
+                # Point the annotation to the found user
+                flag_user_id = user.id
+            # Otherwise create a new user from the 
+            else
+                # Make a new user and point the annotation to that.
+                p = Digest::SHA1.hexdigest "default"                
+                user = User.new(:name => params[:creator][:email], :email => params[:creator][:email], :password => p, :password_confirmation => p)
+                user.save
+                flag_user_id = user.id
+            end
+        end
+
+        @user = User.find(flag_user_id)
+
+        #Find the flag-tags and add them
+        #This also inserts the packed data, separated by |
+        tagSelectors = params[:body].select { |item| item[:purpose] == "flagging" }
+        tags = tagSelectors.map! { |item| "FlaggedItem|" + item[:value] + "|" + @user.name}
+
+        # Create SemanticTags for new flagged tags
+        tags.each do |tagStr|
+            # Find or create the SemanticTag for the tag
+            tag_entry = SemanticTag.find_or_create_by(tag: tagStr)
+
+            # Make a new TagAnnotation relating tag_entry to the annotation
+            tag_annotation = TagAnnotation.new
+            tag_annotation.semantic_tag_id = tag_entry.id
+            tag_annotation.annotation_id = @annotation.id
+            tag_annotation.save
+        end     
+
+        @ret = {}
+        @ret[:id] = @annotation.id
+        render :json => @ret
+    end   
 
     
     ############ EDIT ANNOTATION ############
