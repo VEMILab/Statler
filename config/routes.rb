@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get    'api/getAnnotationsByLocation' => 'api_session#getAnnotationsByLocation'
   post   'api/addAnnotation' => 'api_session#addAnnotation'
   post   'api/editAnnotation' => 'api_session#editAnnotation'
+  post   'api/flagAnnotation' => 'api_session#flagAnnotation'
   delete 'api/deleteAnnotation' => 'api_session#deleteAnnotation'
   post   'api/login' => 'api_session#login'
   delete 'api/logout' => 'api_session#logout'
